@@ -1,0 +1,42 @@
+@layer layout {
+  .breadcrumb {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #1a1a1a;
+    padding: 0 16px;
+    width: 100%;
+    background: #fff;
+  }
+  .breadcrumb .breadcrumb-margin {
+    margin: 0 auto;
+    max-width: var(--max-width);
+  }
+  .breadcrumb .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .breadcrumb .breadcrumb-list > li + li {
+    position: relative;
+    padding-left: 16px;
+  }
+  .breadcrumb .breadcrumb-list > li + li::before {
+    content: "›";
+    position: absolute;
+    left: 1px;
+    bottom: -4px;
+    font-size: 20px;
+    color: #9aa7c1;
+  }
+  .breadcrumb a {
+    font-weight: 600;
+  }
+  .breadcrumb [aria-current="page"] {
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+}

@@ -1,0 +1,53 @@
+@layer layout {
+  .bk-tabs {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 10px 0;
+    display: flex;
+    align-items: flex-end;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-bottom: 1px solid var(--line);
+    scrollbar-width: none;
+  }
+  .bk-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bk-tab {
+    position: relative;
+    display: inline-block;
+    padding: 14px 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-decoration: none;
+    flex: 0 0 auto;
+  }
+  .bk-tab .muted {
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .bk-tab::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -11px;
+    height: 3px;
+    background: transparent;
+    border-radius: 3px;
+  }
+  .bk-tab.is-active {
+    color: var(--blue);
+  }
+  .bk-tab.is-active::after {
+    background: #1a73e8;
+  }
+
+  .bk-tab:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+  }
+}

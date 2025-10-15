@@ -1,0 +1,75 @@
+@layer utilities {
+  .link {
+    color: var(--link, #2563eb);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .link:visited {
+    color: var(--link, #2563eb);
+    opacity: 0.8;
+  }
+
+  .link:hover {
+    color: var(--blue-2, #006ce4);
+    text-decoration: underline;
+  }
+
+  .link:active {
+    color: var(--blue, #003b95);
+  }
+
+  .link-underline {
+    position: relative;
+  }
+
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    left: 0;
+    bottom: -2px;
+    background-color: currentColor;
+    transition: width 0.3s ease-in-out;
+  }
+
+  .link-underline:hover::after {
+    width: 100%;
+  }
+
+  .link-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    background-color: var(--blue, #003b95);
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.2s ease-in-out;
+    text-decoration: none;
+  }
+
+  .link-button:hover {
+    background-color: var(--blue-2, #006ce4);
+  }
+
+  .link-button:active {
+    background-color: var(--blue, #003b95);
+  }
+
+  .link-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .link-icon svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+  }
+}
