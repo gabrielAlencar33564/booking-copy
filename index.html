@@ -9,7 +9,6 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <!-- Material Symbols -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,0"
@@ -130,24 +129,49 @@
           </div>
 
           <div class="overview-grid">
-            <div class="gallery-grid-layout">
-              <div class="gallery-main-grid">
-                <figure class="gallery-image image-1"></figure>
-                <figure class="gallery-image image-2"></figure>
-                <figure class="gallery-image image-3"></figure>
-              </div>
-
-              <div class="gallery-sub-grid">
-                <figure class="gallery-image"></figure>
-                <figure class="gallery-image"></figure>
-                <figure class="gallery-image"></figure>
-                <figure class="gallery-image"></figure>
-                <figure class="gallery-image"></figure>
-              </div>
+            <div class="gallery-grid-layout" id="gallery">
+              <div class="gallery-main-grid" id="gallery-main"></div>
+              <div class="gallery-sub-grid" id="gallery-sub"></div>
             </div>
 
             <div class="details-grid">
-              <div class="reviews"></div>
+              <div id="review-card" class="review-card">
+                <div class="rc-head">
+                  <div class="rc-head-title">
+                    <p class="rc-head-title-title"></p>
+                    <p class="rc-head-title-subtitle"></p>
+                  </div>
+                  <div class="rc-badge"></div>
+                </div>
+
+                <div class="rc-content">
+                  <p class="rc-content-title"></p>
+                  <p class="rc-content-review-description"></p>
+                  <div class="rc-reviewer">
+                    <div class="avatar" aria-hidden="true"></div>
+                    <div class="who">
+                      <strong class="rc-name"></strong>
+                      <span class="flag"></span>
+                      <span class="country"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rc-bottom">
+                  <div class="label"></div>
+                  <div class="rc-badge--alt"></div>
+                </div>
+
+                <div class="rc-arrows" aria-hidden="true">
+                  <button class="rc-arrow rc-prev" aria-label="Anterior">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                  </button>
+                  <button class="rc-arrow rc-next" aria-label="Próximo">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                  </button>
+                </div>
+              </div>
+
               <div class="maps"></div>
             </div>
           </div>
@@ -259,109 +283,11 @@
               </div>
             </div>
 
-            <div class="rooms">
+            <div class="rooms" id="rooms">
               <div class="rooms__head">
                 <div class="rooms__col rooms__col--type">Tipo de quarto</div>
                 <div class="rooms__col rooms__col--people">Quantas pessoas?</div>
                 <div class="rooms__col rooms__col--action"></div>
-              </div>
-
-              <div class="rooms__row">
-                <div class="rooms__cell rooms__cell--type">
-                  <a href="#" class="link link-underline">Suíte Superior</a>
-                  <div class="rooms__meta">
-                    <span class="rooms__meta-item">
-                      <span class="ms">king_bed</span>
-                      1 cama de casal grande
-                    </span>
-                  </div>
-                </div>
-                <div
-                  class="rooms__cell rooms__cell--people"
-                  aria-label="Capacidade: 2 pessoas"
-                >
-                  <div class="people">
-                    <span class="ms">person</span>
-                    <span class="ms">person</span>
-                  </div>
-                </div>
-                <div class="rooms__cell rooms__cell--action">
-                  <button class="btn btn-primary">Visualizar preços</button>
-                </div>
-              </div>
-
-              <div class="rooms__row">
-                <div class="rooms__cell rooms__cell--type">
-                  <a href="#" class="link link-underline">Suíte Dupla Standard</a>
-                  <div class="rooms__meta">
-                    <span class="rooms__meta-item">
-                      <span class="ms">king_bed</span>
-                      1 cama de casal grande
-                    </span>
-                  </div>
-                </div>
-                <div
-                  class="rooms__cell rooms__cell--people"
-                  aria-label="Capacidade: 2 pessoas"
-                >
-                  <div class="people">
-                    <span class="ms">person</span>
-                    <span class="ms">person</span>
-                  </div>
-                </div>
-                <div class="rooms__cell rooms__cell--action">
-                  <button class="btn btn-primary">Visualizar preços</button>
-                </div>
-              </div>
-
-              <div class="rooms__row">
-                <div class="rooms__cell rooms__cell--type">
-                  <a href="#" class="link link-underline">Suíte Superior</a>
-                  <div class="rooms__meta">
-                    <span class="rooms__meta-item">
-                      <span class="ms">king_bed</span>
-                      1 cama de casal grande
-                    </span>
-                  </div>
-                </div>
-                <div
-                  class="rooms__cell rooms__cell--people"
-                  aria-label="Capacidade: 4 pessoas"
-                >
-                  <div class="people">
-                    <span class="ms">person</span>
-                    <span class="ms">person</span>
-                    <span class="ms">person</span>
-                    <span class="ms">person</span>
-                  </div>
-                </div>
-                <div class="rooms__cell rooms__cell--action">
-                  <button class="btn btn-primary">Visualizar preços</button>
-                </div>
-              </div>
-
-              <div class="rooms__row">
-                <div class="rooms__cell rooms__cell--type">
-                  <a href="#" class="link link-underline">Quarto Duplo Econômico</a>
-                  <div class="rooms__meta">
-                    <span class="rooms__meta-item">
-                      <span class="ms">king_bed</span>
-                      1 cama de casal grande
-                    </span>
-                  </div>
-                </div>
-                <div
-                  class="rooms__cell rooms__cell--people"
-                  aria-label="Capacidade: 2 pessoas"
-                >
-                  <div class="people">
-                    <span class="ms">person</span>
-                    <span class="ms">person</span>
-                  </div>
-                </div>
-                <div class="rooms__cell rooms__cell--action">
-                  <button class="btn btn-primary">Visualizar preços</button>
-                </div>
               </div>
             </div>
 
@@ -372,83 +298,28 @@
             </p>
           </div>
 
-          <div class="reviews">
+          <div id="reviews" class="reviews">
             <div class="title-content">
-              <h1 class="title">Avaliações de hóspedes</h1>
-              <button class="btn btn-primary">Veja a disponibilidade</button>
+              <h1 class="title"></h1>
+              <button class="btn btn-primary"></button>
             </div>
 
             <div class="rev-sum__score">
-              <span class="rev-sum__badge">9,3</span>
+              <span class="rev-sum__badge"></span>
               <div class="rev-sum__meta">
-                <p class="rev-sum__label"><strong>Fantástico</strong> • 114 avaliações</p>
-                <a class="link" href="#">Ler todas as avaliações</a>
+                <p class="rev-sum__label"></p>
+                <a class="link" href="#" rel="nofollow noopener">
+                  Ler todas as avaliações
+                </a>
               </div>
             </div>
 
             <div>
               <h3 class="topics__label">Categorias:</h3>
               <div class="rev-sum__grid">
-                <ul class="rev-sum__list">
-                  <li class="rev-sum__item">
-                    <span class="rev-sum__name">Funcionários</span>
-                    <span class="rev-sum__value">9,2</span>
-                    <span class="rev-sum__bar" style="--val: 92%"></span>
-                  </li>
-
-                  <li class="rev-sum__item">
-                    <span class="rev-sum__name">Conforto</span>
-                    <span class="rev-sum__value">9,4</span>
-                    <span class="rev-sum__bar" style="--val: 94%"></span>
-                  </li>
-
-                  <li class="rev-sum__item">
-                    <span class="rev-sum__name">
-                      Wi-Fi gratuito
-                      <span class="rev-sum__trend"
-                        ><span class="ms">trending_up</span></span
-                      >
-                    </span>
-                    <span class="rev-sum__value">10</span>
-                    <span
-                      class="rev-sum__bar rev-sum__bar--ok"
-                      style="--val: 100%"
-                    ></span>
-                  </li>
-                </ul>
-
-                <ul class="rev-sum__list">
-                  <li class="rev-sum__item">
-                    <span class="rev-sum__name">Comodidades</span>
-                    <span class="rev-sum__value">9,3</span>
-                    <span class="rev-sum__bar" style="--val: 93%"></span>
-                  </li>
-
-                  <li class="rev-sum__item">
-                    <span class="rev-sum__name">Custo-benefício</span>
-                    <span class="rev-sum__value">9,3</span>
-                    <span class="rev-sum__bar" style="--val: 93%"></span>
-                  </li>
-                </ul>
-
-                <ul class="rev-sum__list">
-                  <li class="rev-sum__item">
-                    <span class="rev-sum__name">Limpeza</span>
-                    <span class="rev-sum__value">9,5</span>
-                    <span class="rev-sum__bar" style="--val: 95%"></span>
-                  </li>
-
-                  <li class="rev-sum__item">
-                    <span class="rev-sum__name">Localização</span>
-                    <span class="rev-sum__value">9,7</span>
-                    <span class="rev-sum__bar" style="--val: 97%"></span>
-                  </li>
-
-                  <li class="rev-sum__note">
-                    <span class="ms">trending_up</span>
-                    Nota alta para Arraial do Cabo
-                  </li>
-                </ul>
+                <ul class="rev-sum__list"></ul>
+                <ul class="rev-sum__list"></ul>
+                <ul class="rev-sum__list"></ul>
               </div>
             </div>
 
@@ -458,128 +329,24 @@
                 class="topics__wrap"
                 role="listbox"
                 aria-label="Tópicos das avaliações"
-              >
-                <button
-                  class="btn btn-secondary-secondary"
-                  role="option"
-                  aria-selected="false"
-                >
-                  <span class="chip__plus">+</span> <span>Localização</span>
-                </button>
-
-                <button
-                  class="btn btn-secondary-secondary"
-                  role="option"
-                  aria-selected="false"
-                >
-                  <span class="chip__plus">+</span> <span>Cama</span>
-                </button>
-
-                <button
-                  class="btn btn-secondary-secondary"
-                  role="option"
-                  aria-selected="false"
-                >
-                  <span class="chip__plus">+</span> <span>Quarto</span>
-                </button>
-
-                <button
-                  class="btn btn-secondary-secondary"
-                  role="option"
-                  aria-selected="false"
-                >
-                  <span class="chip__plus">+</span> <span>Praia</span>
-                </button>
-
-                <button
-                  class="btn btn-secondary-secondary"
-                  role="option"
-                  aria-selected="false"
-                >
-                  <span class="chip__plus">+</span> <span>Limpeza</span>
-                </button>
-              </div>
+              ></div>
             </div>
 
             <div>
               <h3 class="topics__label">Os hóspedes amaram ficar aqui</h3>
-              <div class="loved-container">
-                <div class="loved-wrap">
-                  <div class="rv-card">
-                    <div class="rv-head">
-                      <img
-                        class="rv-avatar"
-                        src="https://i.pravatar.cc/64?img=12"
-                        alt="Foto de Thauan"
-                      />
-                      <div class="rv-who">
-                        <strong class="rv-name">Thauan</strong>
-                        <div class="rv-country">
-                          <span class="rv-flag">🇧🇷</span> Brasil
-                        </div>
-                      </div>
-                    </div>
 
-                    <blockquote class="rv-text">
-                      Muito confortável e aconchegante. E a localização é excelente, 1 min
-                      a pé da praia dos anjos e 2 min a pé da praia do forno.
-                    </blockquote>
-
-                    <a href="#" class="rv-more">Saiba mais</a>
-                  </div>
-
-                  <div class="rv-card">
-                    <div class="rv-head">
-                      <img
-                        class="rv-avatar"
-                        src="https://i.pravatar.cc/64?img=32"
-                        alt="Foto de Mello"
-                      />
-                      <div class="rv-who">
-                        <strong class="rv-name">Mello</strong>
-                        <div class="rv-country">
-                          <span class="rv-flag">🇧🇷</span> Brasil
-                        </div>
-                      </div>
-                    </div>
-
-                    <blockquote class="rv-text">
-                      O quarto é maravilhoso! Eu amei… Com certeza voltarei mais vezes.
-                      Tudo limpo arrumado. Aconchegante.
-                    </blockquote>
-
-                    <a href="#" class="rv-more">Saiba mais</a>
-                  </div>
-
-                  <div class="rv-card">
-                    <div class="rv-head">
-                      <div class="rv-avatar rv-avatar--initial">M</div>
-                      <div class="rv-who">
-                        <strong class="rv-name">Mariana</strong>
-                        <div class="rv-country">
-                          <span class="rv-flag">🇧🇷</span> Brasil
-                        </div>
-                      </div>
-                    </div>
-
-                    <blockquote class="rv-text">
-                      O quarto oferece um bom custo benefício, bem localizado, próximo do
-                      comércio, píer dos barcos, restaurantes, padarias; é perfeito. Vale
-                      muito a pena! Tem uma agência de passeio no mesmo prédio, isso
-                      ajudou muito. Com certeza vou voltar e…
-                    </blockquote>
-
-                    <a href="#" class="rv-more">Saiba mais</a>
-                  </div>
-                </div>
-
+              <div class="loved-container" id="loved">
                 <div class="loved-buttons">
-                  <button class="rv-prev" aria-label="Depoimentos anteriores">
+                  <button class="rv-prev" aria-label="Anterior">
                     <span class="material-symbols-outlined">chevron_left</span>
                   </button>
-                  <button class="rv-next" aria-label="Próximo depoimento">
+                  <button class="rv-next" aria-label="Próximo">
                     <span class="material-symbols-outlined">chevron_right</span>
                   </button>
+                </div>
+
+                <div class="loved-wrap">
+                  <div class="loved-track" id="lovedTrack" aria-live="polite"></div>
                 </div>
               </div>
             </div>
@@ -589,104 +356,15 @@
             </button>
           </div>
 
-          <div class="faq">
+          <div id="faq" class="faq">
             <div class="title-content">
-              <h1 class="title">O que os viajantes estão perguntando</h1>
-              <button class="btn btn-primary">Veja a disponibilidade</button>
+              <h1 class="title"></h1>
+              <button class="btn btn-primary"></button>
             </div>
-            <div class="faq-grid">
-              <div class="faq-card" role="list">
-                <ul class="faq-list">
-                  <li>
-                    <a class="faq-item" href="#">
-                      <span class="ms ms-bubbles" aria-hidden="true">forum</span>
-                      Posso estacionar ali?
-                      <span class="ms ms-arrow" aria-hidden="true">chevron_right</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="faq-item" href="#">
-                      <span class="ms ms-bubbles" aria-hidden="true">forum</span>
-                      A acomodação serve café da manhã?
-                      <span class="ms ms-arrow" aria-hidden="true">chevron_right</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="faq-item" href="#">
-                      <span class="ms ms-bubbles" aria-hidden="true">forum</span>
-                      Tem restaurante?
-                      <span class="ms ms-arrow" aria-hidden="true">chevron_right</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="faq-item" href="#">
-                      <span class="ms ms-bubbles" aria-hidden="true">forum</span>
-                      Quais são os horários de check-in e check-out?
-                      <span class="ms ms-arrow" aria-hidden="true">chevron_right</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="faq-item" href="#">
-                      <span class="ms ms-bubbles" aria-hidden="true">forum</span>
-                      Tem piscina?
-                      <span class="ms ms-arrow" aria-hidden="true">chevron_right</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
 
-              <div class="faq-card" role="list">
-                <ul class="faq-list">
-                  <li>
-                    <a class="faq-item" href="#">
-                      <span class="ms ms-bubbles" aria-hidden="true">forum</span>
-                      Quais são os restaurantes, atrações e opções de transporte público
-                      por perto?
-                      <span class="ms ms-arrow" aria-hidden="true">chevron_right</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="faq-item" href="#">
-                      <span class="ms ms-bubbles" aria-hidden="true">forum</span>
-                      Tem quartos com banheiro privativo?
-                      <span class="ms ms-arrow" aria-hidden="true">chevron_right</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="faq-item" href="#">
-                      <span class="ms ms-bubbles" aria-hidden="true">forum</span>
-                      Posso levar meu pet?
-                      <span class="ms ms-arrow" aria-hidden="true">chevron_right</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="faq-item" href="#">
-                      <span class="ms ms-bubbles" aria-hidden="true">forum</span>
-                      Tem spa?
-                      <span class="ms ms-arrow" aria-hidden="true">chevron_right</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="faq-item" href="#">
-                      <span class="ms ms-bubbles" aria-hidden="true">forum</span>
-                      Tem quartos com varanda?
-                      <span class="ms ms-arrow" aria-hidden="true">chevron_right</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
+            <div class="faq-grid"></div>
 
-              <div class="faq-cta">
-                <h3 id="faq-title" class="faq-cta-title">
-                  Ainda não encontrou a resposta?
-                </h3>
-                <button class="btn btn-primary" type="button">Faça uma pergunta</button>
-                <p class="faq-cta-note">
-                  Temos uma resposta imediata para a maioria das perguntas
-                </p>
-              </div>
-            </div>
-            <button class="btn btn-primary-outline">Ler todas as perguntas</button>
+            <button class="btn btn-primary-outline"></button>
           </div>
 
           <div class="nearby">
@@ -1227,5 +905,31 @@
 
     <script src="content.js"></script>
     <script src="app.js"></script>
+
+    <script type="module">
+      import { initGallery } from "/javascript/gallery.js";
+      import { initRooms } from "/javascript/rooms.js";
+      import { initReviews } from "/javascript/reviews.js";
+      import { initFaq } from "/javascript/faq.js";
+      import { initReviewCard } from "/javascript/reviewCard.js";
+
+      initReviewCard({ rootSelector: "#review-card", dataUrl: "/data/reviews.json" });
+      initFaq({
+        rootSelector: "#faq",
+        dataUrl: "/data/faq.json",
+      });
+      initReviews({
+        rootSelector: "#reviews",
+        dataUrl: "/data/reviews.json",
+      });
+      initGallery({
+        rootSelector: "#gallery",
+        dataUrl: "/data/gallery.json",
+      });
+      initRooms({
+        rootSelector: "#rooms",
+        dataUrl: "/data/rooms.json",
+      });
+    </script>
   </body>
 </html>

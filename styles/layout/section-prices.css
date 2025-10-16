@@ -345,18 +345,34 @@
     background: #f8fafc;
   }
 
+  .rv-prev[disabled],
+  .rv-next[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   .loved-wrap {
-    display: grid;
+    overflow: hidden;
+    /* display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 16px; */
+  }
+
+  .loved-track {
+    display: flex;
     gap: 16px;
+    will-change: transform;
+    transition: transform 0.35s ease;
   }
 
   .rv-card {
-    position: relative;
-    background: var(--card-bg);
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    width: 100%;
   }
   .rv-head {
     display: flex;
@@ -407,10 +423,7 @@
     color: var(--link);
     font-weight: 600;
     font-size: 14px;
-    text-decoration: none;
-  }
-  .rv-more:hover {
-    text-decoration: underline;
+    margin-top: auto;
   }
 
   .loved-buttom-more {
@@ -429,7 +442,7 @@
   .ms-bubbles {
     font-size: 20px;
     color: #374151;
-  } /* forum (duas bolhas) */
+  }
   .ms-arrow {
     font-size: 20px;
     color: #6b7280;
@@ -447,11 +460,10 @@
 
   .faq-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 340px; /* duas listas + CTA */
+    grid-template-columns: 1fr 1fr 340px;
     gap: 16px;
   }
 
-  /* cards de lista */
   .faq-card {
     background: var(--bg);
     border: 1px solid var(--line);
@@ -464,10 +476,10 @@
     padding: 0;
   }
   .faq-list li {
-    border-bottom: 1px solid var(--line); /* separador em cada li */
+    border-bottom: 1px solid var(--line);
   }
   .faq-list li:last-child {
-    border-bottom: none; /* sem traço no último */
+    border-bottom: none;
   }
   .faq-item {
     display: grid;
@@ -482,11 +494,12 @@
   .faq-cta {
     background: #fff;
     border: 1px solid var(--line);
-    border-radius: var(--radius);
+    border-radius: 8px;
     padding: 20px 16px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     gap: 14px;
   }
   .faq-cta-title {
@@ -500,13 +513,9 @@
     font-size: 14px;
   }
 
-  /* responsivo */
   @media (max-width: 980px) {
     .faq-grid {
       grid-template-columns: 1fr;
-    }
-    .faq-cta {
-      order: -1;
     }
   }
   @media (max-width: 1024px) {

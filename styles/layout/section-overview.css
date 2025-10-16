@@ -59,6 +59,14 @@
     background-color: gray;
     object-fit: cover;
     margin: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .gallery-image.is-more::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
   }
 
   .gallery-main-grid {
@@ -84,9 +92,21 @@
 
   .gallery-sub-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(var(--sub-cols, 5), 1fr);
     gap: 8px;
     height: 7rem;
+  }
+
+  .more-badge {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
   }
 
   .details-grid {
@@ -100,9 +120,10 @@
     border-radius: 8px;
     width: 100%;
     height: 100%;
-    background-color: gray;
+    border: 1px solid var(--line);
     object-fit: cover;
     margin: 0;
+    overflow: hidden;
   }
 
   @media (max-width: 768px) {
@@ -251,6 +272,173 @@
   @media (max-width: 420px) {
     .amenities-list {
       grid-template-columns: 1fr;
+    }
+  }
+
+  .review-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rc-head {
+    display: flex;
+    align-items: center;
+    text-align: end;
+    justify-content: end;
+    padding: 12px 16px;
+    gap: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .rc-head .rc-head-title .rc-head-title-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 14px;
+  }
+  .rc-head .rc-head-title .rc-head-title-subtitle {
+    margin: 0;
+    font-size: 12px;
+  }
+  .rc-badge {
+    background-color: var(--blue);
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px;
+    font-weight: 700;
+    min-width: max-content;
+    text-align: center;
+    border-bottom-left-radius: 0;
+  }
+
+  .rc-content {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px;
+    overflow: hidden;
+  }
+  .rc-content-title {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .rc-content-review-description {
+    font-size: 14px;
+    padding: 0 20px;
+    position: relative;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .rc-content-review-description::before,
+  .rc-content-review-description::after {
+    font-size: 20px;
+    color: #ccc;
+    font-weight: bold;
+    font-family: serif;
+  }
+
+  .rc-content-review-description::before {
+    content: "“";
+    margin-right: 4px;
+  }
+
+  .rc-content-review-description::after {
+    content: "”";
+    margin-left: 4px;
+  }
+
+  .rc-arrows {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+    justify-content: space-between;
+    align-items: center;
+  }
+  .rc-arrow {
+    border-radius: 999px;
+    color: #94a3b8;
+    border: none;
+    background-color: transparent;
+    cursor: default;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .rc-arrow:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .rc-reviewer {
+    display: flex;
+    margin-top: auto;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  .avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    color: #475569;
+  }
+  .who {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .flag {
+    font-size: 16px;
+    line-height: 1;
+  }
+  .country {
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  /* Bottom highlight */
+  .rc-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    gap: 12px;
+    border-top: 1px solid var(--line);
+  }
+  .rc-bottom .label {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.4;
+    text-align: end;
+  }
+  .rc-badge--alt {
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 5px;
+    font-weight: 700;
+    min-width: max-content;
+    text-align: center;
+    border-bottom-left-radius: 0;
+  }
+
+  /* Pequenas responsividades */
+  @media (max-width: 360px) {
+    .review-card {
+      width: 100%;
     }
   }
 }
