@@ -1,0 +1,66 @@
+@layer layout {
+  .rules .rules-content {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 16px;
+  }
+  .rules-box {
+    margin-top: 24px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  .rule-row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 16px;
+    padding: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .rule-row:last-child {
+    border-bottom: 0;
+  }
+
+  .rule-left {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    align-items: start;
+    gap: 10px;
+  }
+  .rule-title {
+    margin: 0;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .rule-right {
+    color: #1f2937;
+  }
+  .rule-right p {
+    margin: 6px 0;
+  }
+  .rule-right a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  .rule-right a:hover {
+    text-decoration: underline;
+  }
+
+  .rule-subtitle {
+    margin: 10px 0 4px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  @media (max-width: 820px) {
+    .rule-row {
+      grid-template-columns: 1fr;
+    }
+    .rule-left {
+      grid-template-columns: 28px 1fr;
+    }
+  }
+}

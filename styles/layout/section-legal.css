@@ -1,0 +1,19 @@
+@layer layout {
+  .legal .notice-content {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 16px;
+  }
+  .notice-box {
+    margin-top: 24px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg);
+    padding: 14px 16px;
+    line-height: 1.45;
+  }
+
+  .notice-box p {
+    margin: 8px 0;
+  }
+}

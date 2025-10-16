@@ -1,0 +1,31 @@
+@layer utilities {
+  .page-container {
+    width: 100%;
+    padding: 16px;
+  }
+  .page-container .page-content {
+    width: 100%;
+    margin-inline: auto;
+    max-width: var(--max-width);
+  }
+
+  .title-content {
+    gap: 8px;
+    display: inline-flex;
+    align-items: start;
+    justify-content: space-between;
+  }
+  .title {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .missing-information {
+    margin-top: 16px;
+    margin-left: auto;
+  }
+  .missing-information a {
+    font-weight: 700;
+  }
+}

@@ -1,50 +1,37 @@
 @layer layout {
   .overview {
-    width: 100%;
-    padding: 16px;
+    padding: 24px 16px;
   }
-
-  .page-container {
-    max-width: var(--max-width);
-    margin-inline: auto;
-  }
-
   .overview-header {
     display: flex;
+    gap: 16px;
     justify-content: space-between;
-    margin-top: 8px;
     margin-bottom: 16px;
   }
 
-  .overview-title {
-    margin: 0 0 8px;
-    font-size: 24px;
-    line-height: 1.2;
-  }
-
-  .overview-address {
+  .overview-header-left .overview-address {
     display: flex;
     flex-wrap: wrap;
     color: #374151;
     font-size: 14px;
+    margin-top: 8px;
   }
-
-  .address-link {
+  .overview-address .address-link {
     font-weight: 700;
     margin-left: 8px;
   }
-
-  .address-pin {
+  .overview-address .address-pin {
     font-size: 16px;
   }
 
   .overview-header-right {
     display: flex;
     gap: 8px;
+    align-items: end;
     flex-direction: column;
   }
 
-  .action-buttons {
+  .overview-header-right .action-buttons {
     display: flex;
     gap: 8px;
     flex-wrap: nowrap;
@@ -124,6 +111,7 @@
     }
 
     .overview-header-right {
+      flex-wrap: wrap;
       flex-direction: row;
       margin-top: 8px;
     }
@@ -203,8 +191,8 @@
     place-items: center;
     width: 24px;
     height: 24px;
+    color: var(--green);
     border-radius: 999px;
-    background: rgba(37, 99, 235, 0.08);
     font-size: 14px;
   }
 

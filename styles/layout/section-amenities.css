@@ -1,0 +1,102 @@
+@layer layout {
+  .amenities .amenities-content {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 16px;
+  }
+  .amenities-score {
+    margin-bottom: 24px;
+  }
+
+  .amenities-inline__title {
+    margin: 0 0 6px;
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .amenities-inline__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin-bottom: 24px;
+  }
+
+  .amenity {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    padding: 2px 0;
+  }
+
+  .amenity__icon {
+    font-size: 18px;
+    color: var(--green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .amenities-grid {
+    color: var(--text);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .amen-col {
+    background: var(--bg);
+  }
+
+  .amen-cat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  .amen-list {
+    list-style: none;
+    margin: 0 0 10px;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .amen-list li {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    align-items: start;
+    gap: 8px;
+    padding: 2px 0;
+  }
+  .amen-list li::before {
+    content: "done";
+    font-family: "Material Symbols Outlined";
+    font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 20;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--check);
+  }
+
+  .amen-note {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  @media (max-width: 1024px) {
+    .amenities-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .amenities-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
