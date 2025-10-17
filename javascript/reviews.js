@@ -132,7 +132,7 @@
         btn.className = "btn btn-secondary-secondary";
         btn.setAttribute("role", "option");
         btn.setAttribute("aria-selected", "false");
-        btn.innerHTML = `<span class="chip__plus">+</span><span>${t}</span>`;
+        btn.innerHTML = `<span class="material-symbols-outlined">add</span><span>${t}</span>`;
         btn.addEventListener("click", () => {
           const sel = btn.getAttribute("aria-selected") === "true";
           btn.setAttribute("aria-selected", String(!sel));

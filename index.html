@@ -36,38 +36,42 @@
     <header class="header-container">
       <div class="header-content">
         <div class="primary">
-          <div class="logo">Logo</div>
+          <div class="logo" id="logo-header">Logo</div>
 
           <button class="btn u-primary-btn variant-one">BRL</button>
-          <button class="btn u-primary-btn variant-one">T</button>
-          <button class="btn u-primary-btn variant-one">T</button>
+          <button class="btn u-primary-btn variant-one">
+            <span class="material-symbols-outlined"> flag_circle </span>
+          </button>
+          <button class="btn u-primary-btn variant-one">
+            <span class="material-symbols-outlined"> help </span>
+          </button>
           <button class="btn u-primary-btn variant-one">Anuncie sua propriedade</button>
         </div>
 
         <nav class="services" aria-label="Serviços">
           <div class="services-content">
             <a href="#" class="u-primary-btn variant-two is-active">
-              <span class="ms">king_bed</span>
+              <span class="material-symbols-outlined"> bed </span>
               <span>Hospedagens</span>
             </a>
 
             <a href="#" class="u-primary-btn variant-two">
-              <span class="ms">flight</span>
+              <span class="material-symbols-outlined"> travel </span>
               <span>Voos</span>
             </a>
 
             <a href="#" class="u-primary-btn variant-two">
-              <span class="ms">directions_car</span>
+              <span class="material-symbols-outlined"> directions_car </span>
               <span>Aluguel de carros</span>
             </a>
 
             <a href="#" class="u-primary-btn variant-two">
-              <span class="ms">attractions</span>
+              <span class="material-symbols-outlined"> attractions </span>
               <span>Atrações</span>
             </a>
 
             <a href="#" class="u-primary-btn variant-two">
-              <span class="ms">local_taxi</span>
+              <span class="material-symbols-outlined"> multiple_airports </span>
               <span>Táxis (aeroporto)</span>
             </a>
           </div>
@@ -75,11 +79,208 @@
       </div>
 
       <div class="filtered">
-        <div class="filtered-content">
-          <div class="filter-button"></div>
-          <div class="filter-button"></div>
-          <div class="filter-button"></div>
-          <button class="btn btn-primary search-button">Pesquisar</button>
+        <div class="filtered-content" id="filters">
+          <div class="filter-button fb fb-destination" data-drop aria-expanded="false">
+            <button
+              class="fb-trigger fb-trigger--input"
+              type="button"
+              aria-haspopup="listbox"
+              aria-expanded="false"
+              aria-controls="drop-destination"
+            >
+              <span class="material-symbols-outlined fb-icon"> bed </span>
+              <input
+                id="dest-input"
+                class="fb-text"
+                type="text"
+                placeholder="Para onde você vai?"
+                autocomplete="off"
+                aria-autocomplete="list"
+                aria-controls="dest-list"
+              />
+            </button>
+
+            <div
+              class="fb-drop fb-drop--dest"
+              id="drop-destination"
+              role="listbox"
+              aria-labelledby="dest-input"
+              hidden
+            >
+              <div class="drop-header">Destinos em alta</div>
+              <ul class="dest-list" id="dest-list"></ul>
+            </div>
+          </div>
+
+          <div class="filter-button fb fb-dates" data-drop aria-expanded="false">
+            <button
+              class="fb-trigger"
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="drop-dates"
+            >
+              <span class="material-symbols-outlined fb-icon"> calendar_month </span>
+              <span class="fb-value" id="dates-value"
+                >Selecione check-in e check-out</span
+              >
+            </button>
+            <div
+              class="fb-drop fb-drop--dates"
+              id="drop-dates"
+              role="dialog"
+              aria-labelledby="dates-value"
+              hidden
+            >
+              <div class="fb-dates-row">
+                <label class="fb-date-field">
+                  <span>Check-in</span>
+                  <input type="date" id="checkin" />
+                </label>
+                <label class="fb-date-field">
+                  <span>Check-out</span>
+                  <input type="date" id="checkout" />
+                </label>
+              </div>
+              <div class="fb-actions">
+                <button class="btn btn-secondary" type="button" data-action="clear-dates">
+                  Limpar
+                </button>
+                <button class="btn btn-primary" type="button" data-action="apply-dates">
+                  Aplicar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-button fb fb-guests" data-drop aria-expanded="false">
+            <button
+              class="fb-trigger"
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="drop-guests"
+            >
+              <span class="material-symbols-outlined"> person </span>
+              <span class="fb-value" id="guests-value">
+                2 adultos · 0 crianças · 1 quarto
+              </span>
+            </button>
+
+            <div
+              class="fb-drop fb-drop--guests"
+              id="drop-guests"
+              role="dialog"
+              aria-labelledby="guests-value"
+              hidden
+            >
+              <div class="g-list">
+                <div class="g-row">
+                  <span class="g-label">Adultos</span>
+                  <div class="g-box">
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="adult"
+                      data-op="-"
+                      aria-label="Diminuir adultos"
+                    >
+                      −
+                    </button>
+                    <output class="g-val ctr-val" id="adult-val">2</output>
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="adult"
+                      data-op="+"
+                      aria-label="Aumentar adultos"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div class="g-row">
+                  <span class="g-label">Crianças</span>
+                  <div class="g-box">
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="child"
+                      data-op="-"
+                      aria-label="Diminuir crianças"
+                    >
+                      −
+                    </button>
+                    <output class="g-val ctr-val" id="child-val">0</output>
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="child"
+                      data-op="+"
+                      aria-label="Aumentar crianças"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div class="g-row">
+                  <span class="g-label">Quartos</span>
+                  <div class="g-box">
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="room"
+                      data-op="-"
+                      aria-label="Diminuir quartos"
+                    >
+                      −
+                    </button>
+                    <output class="g-val ctr-val" id="room-val">1</output>
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="room"
+                      data-op="+"
+                      aria-label="Aumentar quartos"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <hr class="g-hr" />
+
+                <div class="g-row g-row--switch">
+                  <span class="g-label">Viajando com pets?</span>
+                  <label class="g-switch">
+                    <input type="checkbox" id="has-pet" />
+                    <span class="g-slider" aria-hidden="true"></span>
+                  </label>
+                </div>
+
+                <p class="g-note">
+                  Animais de serviço não são considerados pets.
+                  <a href="#" class="g-link"
+                    >Leia mais sobre viagens com animais de serviço</a
+                  >
+                </p>
+
+                <div class="g-actions">
+                  <button
+                    class="g-ok btn btn-primary"
+                    type="button"
+                    data-action="apply-guests"
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary search-button" id="search-btn">Pesquisar</button>
         </div>
       </div>
     </header>
@@ -100,14 +301,8 @@
         <div class="page-content">
           <div class="overview-header">
             <div class="overview-header-left">
-              <h1 class="title">Suítes Viver Arraial do Cabo</h1>
-              <div class="overview-address">
-                <span class="address-pin ms">location_on</span>
-                46 Rua Ezer Teixeira de Melo, Arraial do Cabo, CEP 28930-000, Brasil
-                <a href="#" class="link address-link">
-                  Localização excelente – mostrar o mapa
-                </a>
-              </div>
+              <h1 class="title"></h1>
+              <div class="overview-address"></div>
             </div>
 
             <div class="overview-header-right">
@@ -172,7 +367,7 @@
                 </div>
               </div>
 
-              <div class="maps"></div>
+              <div class="maps" id="maps"></div>
             </div>
           </div>
 
@@ -219,86 +414,14 @@
           </div>
 
           <div class="overview-info">
-            <div class="overview-info-left">
-              <p>
-                Suítes Viver Arraial do Cabo fornece quartos com ar-condicionado e
-                banheiro privativo em Arraial do Cabo. Praia dos Anjos fica a 4 minutos a
-                pé de distância e Museu Oceanográfico fica a 300 metros. Todos os quartos
-                oferecem TV de tela plana com canais via satélite e banheiro privativo. A
-                acomodação oferece um serviço de concierge e Wi-Fi grátis em toda a
-                propriedade.
-              </p>
-
-              <p>Neste hotel, cada quarto está equipado com roupa de cama e toalhas.</p>
-
-              <p>
-                Há vários pontos de interesse famosos perto de Suítes Viver Arraial do
-                Cabo, incluindo Igreja de Nossa Senhora dos Remédios, Estádio Hermenegildo
-                Barcellos e Porto do Forno. O Aeroporto de Aeroporto de Cabo Frio fica a 9
-                km de distância.
-              </p>
-
-              <p>
-                Casais particularmente gostam da localização — eles deram nota
-                <strong>9,7</strong> para viagem a dois.
-              </p>
-
-              <p class="distance-note">
-                A distância na descrição da acomodação é calculada pelo © OpenStreetMap
-              </p>
-
-              <h3 class="amenities-title">Ótimo para sua estadia</h3>
-
-              <ul class="amenities-list">
-                <li class="amenity">
-                  <span class="amenity-icon ms" aria-hidden="true">ac_unit</span>
-                  <span>Ar-condicionado</span>
-                </li>
-                <li class="amenity">
-                  <span class="amenity-icon ms" aria-hidden="true">shower</span>
-                  <span>Banheiro privativo</span>
-                </li>
-                <li class="amenity">
-                  <span class="amenity-icon ms" aria-hidden="true">wifi</span>
-                  <span>Wi-Fi gratuito</span>
-                </li>
-                <li class="amenity">
-                  <span class="amenity-icon ms" aria-hidden="true">tv</span>
-                  <span>TV de tela plana</span>
-                </li>
-                <li class="amenity">
-                  <span class="amenity-icon ms" aria-hidden="true">tour</span>
-                  <span>Balcão de turismo</span>
-                </li>
-                <li class="amenity">
-                  <span class="amenity-icon ms" aria-hidden="true">shower</span>
-                  <span>Chuveiro</span>
-                </li>
-                <li class="amenity">
-                  <span class="amenity-icon ms" aria-hidden="true">kitchen</span>
-                  <span>Frigobar</span>
-                </li>
-              </ul>
-            </div>
-
-            <div
-              class="overview-info-right highlights-card"
-              aria-label="Destaques da acomodação"
-            >
-              <h4 class="highlights-title">Destaques da acomodação</h4>
-
+            <div class="overview-info-left"></div>
+            <div class="overview-info-right">
+              <h4 class="highlights-title"></h4>
               <p class="highlight-row">
-                <span class="hi-icon ms" aria-hidden="true">location_on</span>
-                <span>
-                  Localizado na área mais bem avaliada em Arraial do Cabo, este hotel tem
-                  uma ótima nota de localização de
-                  <strong>9,7</strong>.
-                </span>
+                <span class="material-symbols-outlined"> location_on </span>
+                <span></span>
               </p>
-
-              <button class="btn btn-primary highlights-cta" type="button">
-                Reservar agora
-              </button>
+              <button class="btn btn-primary highlights-cta" type="button"></button>
             </div>
           </div>
         </div>
@@ -313,15 +436,195 @@
             </div>
 
             <p class="alert">
+              <span class="material-symbols-outlined"> error </span>
               Selecione as datas para conferir a disponibilidade e os preços desta
               acomodação
             </p>
 
             <div class="filtered">
-              <div class="filtered-content">
-                <div class="filter-button"></div>
-                <div class="filter-button"></div>
-                <button class="btn btn-primary search-button">Pesquisar</button>
+              <div class="filtered-content" id="filters-mini">
+                <div class="filter-button fb fb-dates" data-drop aria-expanded="false">
+                  <button
+                    class="fb-trigger"
+                    type="button"
+                    aria-haspopup="dialog"
+                    aria-expanded="false"
+                    aria-controls="mini-drop-dates"
+                  >
+                    <span class="material-symbols-outlined fb-icon">
+                      calendar_month
+                    </span>
+                    <span class="fb-value" id="mini-dates-value"
+                      >Selecione check-in e check-out</span
+                    >
+                  </button>
+
+                  <div
+                    class="fb-drop fb-drop--dates"
+                    id="mini-drop-dates"
+                    role="dialog"
+                    aria-labelledby="mini-dates-value"
+                    hidden
+                  >
+                    <div class="fb-dates-row">
+                      <label class="fb-date-field">
+                        <span>Check-in</span>
+                        <input type="date" id="mini-checkin" />
+                      </label>
+                      <label class="fb-date-field">
+                        <span>Check-out</span>
+                        <input type="date" id="mini-checkout" />
+                      </label>
+                    </div>
+                    <div class="fb-actions">
+                      <button
+                        class="btn btn-secondary"
+                        type="button"
+                        data-action="mini-clear-dates"
+                      >
+                        Limpar
+                      </button>
+                      <button
+                        class="btn btn-primary"
+                        type="button"
+                        data-action="mini-apply-dates"
+                      >
+                        Aplicar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="filter-button fb fb-guests" data-drop aria-expanded="false">
+                  <button
+                    class="fb-trigger"
+                    type="button"
+                    aria-haspopup="dialog"
+                    aria-expanded="false"
+                    aria-controls="mini-drop-guests"
+                  >
+                    <span class="material-symbols-outlined fb-icon"> person </span>
+                    <span class="fb-value" id="mini-guests-value"
+                      >2 adultos · 0 crianças · 1 quarto</span
+                    >
+                  </button>
+
+                  <div
+                    class="fb-drop fb-drop--guests"
+                    id="mini-drop-guests"
+                    role="dialog"
+                    aria-labelledby="mini-guests-value"
+                    hidden
+                  >
+                    <div class="g-list">
+                      <div class="g-row">
+                        <span class="g-label">Adultos</span>
+                        <div class="g-box">
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="adult"
+                            data-op="-"
+                            aria-label="Diminuir adultos"
+                          >
+                            −
+                          </button>
+                          <output class="g-val ctr-val" id="mini-adult-val">2</output>
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="adult"
+                            data-op="+"
+                            aria-label="Aumentar adultos"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="g-row">
+                        <span class="g-label">Crianças</span>
+                        <div class="g-box">
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="child"
+                            data-op="-"
+                            aria-label="Diminuir crianças"
+                          >
+                            −
+                          </button>
+                          <output class="g-val ctr-val" id="mini-child-val">0</output>
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="child"
+                            data-op="+"
+                            aria-label="Aumentar crianças"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="g-row">
+                        <span class="g-label">Quartos</span>
+                        <div class="g-box">
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="room"
+                            data-op="-"
+                            aria-label="Diminuir quartos"
+                          >
+                            −
+                          </button>
+                          <output class="g-val ctr-val" id="mini-room-val">1</output>
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="room"
+                            data-op="+"
+                            aria-label="Aumentar quartos"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      <hr class="g-hr" />
+
+                      <div class="g-row g-row--switch">
+                        <span class="g-label">Viajando com pets?</span>
+                        <label class="g-switch">
+                          <input type="checkbox" id="mini-has-pet" />
+                          <span class="g-slider" aria-hidden="true"></span>
+                        </label>
+                      </div>
+
+                      <p class="g-note">
+                        Animais de serviço não são considerados pets.
+                        <a href="#" class="g-link"
+                          >Leia mais sobre viagens com animais de serviço</a
+                        >
+                      </p>
+
+                      <div class="g-actions">
+                        <button
+                          class="g-ok btn btn-primary"
+                          type="button"
+                          data-action="mini-apply-guests"
+                        >
+                          OK
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="btn btn-primary search-button" id="mini-search-btn">
+                  Pesquisar
+                </button>
               </div>
             </div>
 
@@ -334,6 +637,7 @@
             </div>
 
             <p class="warning">
+              <span class="material-symbols-outlined"> error </span>
               A legislação brasileira permite que você cancele gratuitamente até 7 dias
               após o momento da reserva. Depois desse período, será aplicada a política de
               cancelamento escolhida.
@@ -844,10 +1148,6 @@
               </p>
             </div>
           </div>
-
-          <!-- <div class="title-content">
-            <h1 class="title">Perguntas frequentes sobre Suítes Viver Arraial do Cabo</h1>
-          </div> -->
         </div>
       </section>
     </main>
@@ -916,13 +1216,6 @@
           </nav>
         </div>
 
-        <div class="footer-controls">
-          <button class="currency">
-            <span class="ms">payments</span>
-            BRL
-          </button>
-        </div>
-
         <hr class="footer-sep" />
 
         <div class="footer-legal">
@@ -931,16 +1224,6 @@
             on-line e serviços relacionados.
             <br />Copyright © 1996–2025 Booking.com™. Todos os direitos reservados.
           </p>
-
-          <ul class="brands">
-            <li><span class="brand">Booking.com</span></li>
-            <li>
-              <span class="brand">priceline<sup>®</sup></span>
-            </li>
-            <li><span class="brand">KAYAK</span></li>
-            <li><span class="brand">agoda</span></li>
-            <li><span class="brand">OpenTable</span></li>
-          </ul>
         </div>
       </div>
     </footer>
@@ -952,6 +1235,7 @@
     <script src="./data/reviews.data.js"></script>
     <script src="./data/gallery.data.js"></script>
     <script src="./data/rooms.data.js"></script>
+    <script src="./data/overview.data.js"></script>
 
     <script src="./javascript/faq.js"></script>
     <script src="./javascript/gallery.js"></script>
@@ -960,6 +1244,8 @@
     <script src="./javascript/reviewCard.js"></script>
     <script src="./javascript/gallery-overlay.js"></script>
     <script src="./javascript/gallery-justified.js"></script>
+    <script src="./javascript/filtered.js"></script>
+    <script src="./javascript/overview.js"></script>
 
     <script>
       initReviewCard({ rootSelector: "#review-card", data: window.DATASETS?.reviews });
@@ -967,6 +1253,8 @@
       initReviews({ rootSelector: "#reviews", data: window.DATASETS?.reviews });
       initGallery({ rootSelector: "#gallery", data: window.DATASETS?.gallery });
       initRooms({ rootSelector: "#rooms", data: window.DATASETS?.rooms });
+      initFilters({ roomSelector: "#filters" });
+      initFilters({ roomSelector: "#filters-mini" });
     </script>
   </body>
 </html>

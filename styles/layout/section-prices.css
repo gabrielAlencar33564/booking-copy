@@ -10,9 +10,13 @@
   }
 
   .prices .alert {
+    display: inline-flex;
+    gap: 8px;
     color: red;
   }
   .prices .warning {
+    display: inline-flex;
+    gap: 8px;
     color: orange;
   }
 

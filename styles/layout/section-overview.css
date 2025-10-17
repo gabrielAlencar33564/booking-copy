@@ -126,6 +126,15 @@
     overflow: hidden;
   }
 
+  .maps a {
+    display: block;
+  }
+  .maps-img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
   @media (max-width: 768px) {
     .overview-header {
       flex-direction: column;
@@ -167,6 +176,15 @@
     margin-top: 32px;
     display: inline-flex;
     gap: 32px;
+  }
+
+  .overview-info-right {
+    padding: 16px;
+    border-radius: 4px;
+    height: max-content;
+    min-width: 21rem;
+    font-size: 14px;
+    background-color: var(--blue-soft);
   }
 
   .overview-info-left p {
@@ -260,6 +278,9 @@
     .overview-info {
       gap: 16px;
       flex-direction: column-reverse;
+    }
+    .overview-info-right {
+      min-width: min-content;
     }
     .highlights-card {
       min-width: min-content;
@@ -361,6 +382,7 @@
     width: 32px;
     height: 32px;
     display: flex;
+    cursor: pointer;
     justify-content: center;
     align-items: center;
   }
