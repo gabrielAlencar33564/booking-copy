@@ -300,16 +300,6 @@
     margin: 0;
     font-size: 12px;
   }
-  .rc-badge {
-    background-color: var(--blue);
-    color: #fff;
-    border-radius: 6px;
-    padding: 5px;
-    font-weight: 700;
-    min-width: max-content;
-    text-align: center;
-    border-bottom-left-radius: 0;
-  }
 
   .rc-content {
     display: flex;
@@ -426,13 +416,9 @@
     text-align: end;
   }
   .rc-badge--alt {
+    color: var(--text);
     border: 1px solid black;
-    border-radius: 6px;
-    padding: 5px;
-    font-weight: 700;
-    min-width: max-content;
-    text-align: center;
-    border-bottom-left-radius: 0;
+    background-color: transparent;
   }
 
   /* Pequenas responsividades */

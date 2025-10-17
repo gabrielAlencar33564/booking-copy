@@ -141,7 +141,7 @@
                     <p class="rc-head-title-title"></p>
                     <p class="rc-head-title-subtitle"></p>
                   </div>
-                  <div class="rc-badge"></div>
+                  <div class="review-badge rc-badge"></div>
                 </div>
 
                 <div class="rc-content">
@@ -159,7 +159,7 @@
 
                 <div class="rc-bottom">
                   <div class="label"></div>
-                  <div class="rc-badge--alt"></div>
+                  <div class="review-badge rc-badge--alt"></div>
                 </div>
 
                 <div class="rc-arrows" aria-hidden="true">
@@ -173,6 +173,48 @@
               </div>
 
               <div class="maps"></div>
+            </div>
+          </div>
+
+          <div class="gm-overlay" id="galleryModal" aria-hidden="true">
+            <div
+              class="gm-dialog"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="gm-title"
+            >
+              <header class="gm-header">
+                <h2 id="gm-title">Suítes Viver Arraial do Cabo</h2>
+                <div class="gm-actions">
+                  <button class="btn btn-primary" type="button" aria-label="Fechar">
+                    Reservar agora
+                  </button>
+
+                  <button class="btn gm-close" type="button" aria-label="Fechar">
+                    <span class="ms" aria-hidden="true">close</span>
+                  </button>
+                </div>
+              </header>
+
+              <div class="gm-content">
+                <div class="gm-gallery" id="gm-grid"></div>
+
+                <div class="gm-aside" id="gm-aside">
+                  <div class="gm-score">
+                    <div class="review-badge gm-score-badge" id="gm-badge">0,0</div>
+                    <div class="gm-score-info">
+                      <p class="gm-score-label" id="gm-label">—</p>
+                      <p class="gm-score-count" id="gm-count">0 avaliações</p>
+                    </div>
+                  </div>
+
+                  <ul class="gm-review-list" id="gm-review-list">
+                    <li class="gm-review-title" id="gm-review-title">
+                      Os hóspedes amaram ficar aqui
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -305,7 +347,7 @@
             </div>
 
             <div class="rev-sum__score">
-              <span class="rev-sum__badge"></span>
+              <span class="review-badge rev-sum__badge"></span>
               <div class="rev-sum__meta">
                 <p class="rev-sum__label"></p>
                 <a class="link" href="#" rel="nofollow noopener">
@@ -903,33 +945,28 @@
       </div>
     </footer>
 
-    <script src="content.js"></script>
-    <script src="app.js"></script>
+    <script src="./content.js"></script>
+    <script src="./app.js"></script>
 
-    <script type="module">
-      import { initGallery } from "/javascript/gallery.js";
-      import { initRooms } from "/javascript/rooms.js";
-      import { initReviews } from "/javascript/reviews.js";
-      import { initFaq } from "/javascript/faq.js";
-      import { initReviewCard } from "/javascript/reviewCard.js";
+    <script src="./data/faq.data.js"></script>
+    <script src="./data/reviews.data.js"></script>
+    <script src="./data/gallery.data.js"></script>
+    <script src="./data/rooms.data.js"></script>
 
-      initReviewCard({ rootSelector: "#review-card", dataUrl: "/data/reviews.json" });
-      initFaq({
-        rootSelector: "#faq",
-        dataUrl: "/data/faq.json",
-      });
-      initReviews({
-        rootSelector: "#reviews",
-        dataUrl: "/data/reviews.json",
-      });
-      initGallery({
-        rootSelector: "#gallery",
-        dataUrl: "/data/gallery.json",
-      });
-      initRooms({
-        rootSelector: "#rooms",
-        dataUrl: "/data/rooms.json",
-      });
+    <script src="./javascript/faq.js"></script>
+    <script src="./javascript/gallery.js"></script>
+    <script src="./javascript/reviews.js"></script>
+    <script src="./javascript/rooms.js"></script>
+    <script src="./javascript/reviewCard.js"></script>
+    <script src="./javascript/gallery-overlay.js"></script>
+    <script src="./javascript/gallery-justified.js"></script>
+
+    <script>
+      initReviewCard({ rootSelector: "#review-card", data: window.DATASETS?.reviews });
+      initFaq({ rootSelector: "#faq", data: window.DATASETS?.faq });
+      initReviews({ rootSelector: "#reviews", data: window.DATASETS?.reviews });
+      initGallery({ rootSelector: "#gallery", data: window.DATASETS?.gallery });
+      initRooms({ rootSelector: "#rooms", data: window.DATASETS?.rooms });
     </script>
   </body>
 </html>

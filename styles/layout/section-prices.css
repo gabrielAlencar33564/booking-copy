@@ -149,24 +149,10 @@
     flex-direction: column;
     padding: 16px 0;
   }
-  .rev-sum {
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    color: var(--text);
-  }
   .rev-sum__score {
     display: flex;
     align-items: center;
     gap: 10px;
-  }
-  .rev-sum__badge {
-    background-color: var(--blue);
-    color: #fff;
-    border-radius: 6px;
-    padding: 5px;
-    font-weight: 700;
-    min-width: max-content;
-    text-align: center;
-    border-bottom-left-radius: 0;
   }
   .rev-sum__meta {
     display: inline-flex;
@@ -353,9 +339,6 @@
 
   .loved-wrap {
     overflow: hidden;
-    /* display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px; */
   }
 
   .loved-track {

@@ -45,3 +45,8 @@ input[type="reset"] {
   color: inherit;
   cursor: pointer;
 }
+ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}

@@ -13,6 +13,7 @@
 @import url("./layout/nav-tabs.css") layer(layout);
 @import url("./layout/breadcrumb.css") layer(layout);
 @import url("./layout/filtered-bar.css") layer(layout);
+@import url("./components/gallery-overlay.css") layer(layout);
 
 @import url("./layout/section-overview.css") layer(layout);
 @import url("./layout/section-prices.css") layer(layout);
