@@ -1,0 +1,123 @@
+label {
+  font-size: 1;
+  color: var(--text);
+  display: block;
+  font-size: 14px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  outline: 1px solid transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+select:focus {
+  outline-color: var(--blue-2);
+  border-color: var(--blue-2);
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background-color: white;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s, border 0.3s;
+}
+input[type="checkbox"]:checked {
+  background-color: var(--blue-2);
+  border-color: var(--blue-2);
+}
+input[type="checkbox"]:checked::after {
+  content: "\2713";
+  color: white;
+  font-size: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-weight: 700;
+  transform: translate(-50%, -50%);
+}
+
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  outline: 1px solid transparent;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background-color: white;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s, border 0.3s;
+}
+input[type="radio"]:checked {
+  background-color: white;
+  outline-color: var(--blue-2);
+  border-color: var(--blue-2);
+}
+input[type="radio"]:checked::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--blue-2);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  min-height: 44px;
+  font-size: 1rem;
+  outline: 1px solid transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background-color: #fff;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+textarea:focus {
+  outline-color: var(--blue-2);
+  border-color: var(--blue-2);
+}
+
+small {
+  display: block;
+  font-size: 1;
+  color: #777;
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 5px;
+}
+
+.required {
+  color: red;
+}

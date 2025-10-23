@@ -1,0 +1,118 @@
+:root {
+  --stepper-blue: #0a58ff;
+  --stepper-blue-ink: #ffffff;
+  --stepper-line: #d7dee8;
+  --stepper-text: #1a2b3b;
+  --stepper-muted: #5b6b7c;
+  --stepper-outline: #b9c3cf;
+  --stepper-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+    "Noto Sans", sans-serif;
+}
+
+.stepper {
+  font-family: var(--stepper-font);
+  color: var(--stepper-text);
+}
+
+.stepper__list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: auto auto max-content;
+  grid-auto-flow: column;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+}
+
+.stepper__item {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.stepper__bullet {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px solid var(--stepper-outline);
+  color: var(--stepper-muted);
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.stepper__check {
+  display: block;
+}
+
+.stepper__label {
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--stepper-text);
+}
+
+.stepper__line {
+  height: 2px;
+  background: var(--stepper-line);
+  width: 100%;
+}
+
+.stepper__item:last-child {
+  grid-template-columns: auto auto;
+}
+.stepper__item:last-child .stepper__line {
+  display: none;
+}
+
+.stepper__item.is-complete .stepper__bullet,
+.stepper__item.is-current .stepper__bullet {
+  background: var(--stepper-blue);
+  color: var(--stepper-blue-ink);
+  border-color: var(--stepper-blue);
+}
+
+.stepper__item:not(.is-complete):not(.is-current) .stepper__label {
+  color: var(--stepper-muted);
+}
+
+.stepper__label-mobile {
+  display: none;
+  font-weight: 700;
+  margin-top: 8px;
+  white-space: nowrap;
+  color: var(--stepper-text);
+}
+
+@media (max-width: 768px) {
+  .stepper__list {
+    gap: 12px;
+  }
+
+  .stepper__item {
+    grid-template-columns: auto 1fr;
+  }
+  .stepper__item:last-child {
+    grid-template-columns: auto;
+  }
+  .stepper__label {
+    display: none;
+    font-size: 14px;
+  }
+  .stepper__bullet {
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+  }
+
+  .stepper__label-mobile {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+}

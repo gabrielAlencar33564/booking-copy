@@ -47,9 +47,14 @@
 
   .gallery-grid-layout {
     display: flex;
+    position: relative;
     flex-direction: column;
     gap: 8px;
     width: 100%;
+  }
+
+  .gallery-grid-layout .loved-buttons {
+    display: none;
   }
 
   .gallery-image {

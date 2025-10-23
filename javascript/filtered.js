@@ -30,6 +30,16 @@
       return;
     }
 
+    const q = (sel, r) => (r || root).querySelector(sel);
+    const qa = (sel, r) => Array.from((r || root).querySelectorAll(sel));
+    const pick = (arr, r) => {
+      for (const s of arr) {
+        const el = q(s, r);
+        if (el) return el;
+      }
+      return null;
+    };
+
     const state = {
       destination: "",
       checkin: "",
@@ -39,13 +49,12 @@
       rooms: 1,
       pet: false,
     };
-
     let justOpenedTick = 0;
 
     function closeAll(except = null) {
-      $$(".fb[data-drop]", root).forEach((wrap) => {
-        const drop = $(".fb-drop", wrap);
-        const trig = $(".fb-trigger", wrap);
+      qa(".fb[data-drop]").forEach((wrap) => {
+        const drop = q(".fb-drop", wrap);
+        const trig = q(".fb-trigger", wrap);
         if (!drop) return;
         const isExcept =
           except && (drop === except || wrap === except || trig === except);
@@ -56,23 +65,38 @@
         }
       });
     }
+
     function openDrop(wrap) {
-      const drop = $(".fb-drop", wrap);
-      const trig = $(".fb-trigger", wrap);
+      const drop = q(".fb-drop", wrap);
+      const trig = q(".fb-trigger", wrap);
       if (!drop) return;
       closeAll(drop);
       drop.hidden = false;
       if (trig) trig.setAttribute("aria-expanded", "true");
       wrap.setAttribute("aria-expanded", "true");
       justOpenedTick = performance.now();
-
-      if (wrap.classList.contains("fb-destination")) $("#dest-input", wrap)?.focus();
-      if (wrap.classList.contains("fb-dates")) $("#checkin", wrap)?.focus();
-      if (wrap.classList.contains("fb-guests"))
-        $('[data-ctr="adult"][data-op="+"]', wrap)?.focus();
+      if (wrap.classList.contains("fb-destination")) {
+        const di = pick(
+          ["#dest-input", '[data-role="dest-input"]', 'input[aria-controls="dest-list"]'],
+          wrap
+        );
+        di && di.focus();
+      }
+      if (wrap.classList.contains("fb-dates")) {
+        const ci = pick(
+          ["#checkin", '[data-role="checkin"]', '[id$="checkin"]', 'input[type="date"]'],
+          wrap
+        );
+        ci && ci.focus();
+      }
+      if (wrap.classList.contains("fb-guests")) {
+        const btn = q('[data-ctr="adult"][data-op="+"]', wrap);
+        btn && btn.focus();
+      }
     }
+
     function toggleDrop(wrap) {
-      const drop = $(".fb-drop", wrap);
+      const drop = q(".fb-drop", wrap);
       if (!drop) return;
       drop.hidden ? openDrop(wrap) : closeAll();
     }
@@ -94,120 +118,164 @@
     document.addEventListener("click", onDocClick);
     document.addEventListener("keydown", onDocKey);
 
-    const destWrap = $(".fb-destination", root);
-    const destInput = destWrap ? $("#dest-input", destWrap) : null;
-    const destList = destWrap ? $("#dest-list", destWrap) : null;
+    (function setupDestination() {
+      const destWrap = q(".fb-destination");
+      if (!destWrap) return;
+      const destInput = pick(
+        ["#dest-input", '[data-role="dest-input"]', 'input[aria-controls="dest-list"]'],
+        destWrap
+      );
+      const destList = pick(
+        ["#dest-list", '[data-role="dest-list"]', ".dest-list"],
+        destWrap
+      );
+      const destValue = pick(
+        ["#dest-value", '[data-role="dest-value"]', ".fb-destination .fb-value"],
+        root
+      );
 
-    function itemHTML(obj) {
-      return `
-        <li class="dest-item" role="option" tabindex="-1"
-            data-city="${obj.city.replace(/"/g, "&quot;")}"
-            data-country="${obj.country.replace(/"/g, "&quot;")}">
-          <span class="material-symbols-outlined">location_on</span>
-          <div>
-            <div class="dest-title">${obj.city}</div>
-            <div class="dest-sub">${obj.country}</div>
-          </div>
-        </li>`;
-    }
-    function renderDestinos(q = "") {
-      if (!destList) return;
-      const term = q.trim().toLowerCase();
-      const list = term
-        ? destinations.filter((d) =>
-            (d.city + " " + d.country).toLowerCase().includes(term)
-          )
-        : destinations;
-      destList.innerHTML = list.length
-        ? list.map(itemHTML).join("")
-        : `<li class="dest-item" aria-disabled="true" style="opacity:.6;cursor:default;">
-             <span class="dest-icon" aria-hidden="true"></span>
-             <div><div class="dest-title">Nenhum destino encontrado</div><div class="dest-sub">Tente outro termo</div></div>
-           </li>`;
-    }
-    destInput?.addEventListener("focus", () => renderDestinos(destInput.value));
-    destInput?.addEventListener("input", () => renderDestinos(destInput.value));
-    destInput?.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowDown" && destList) {
-        const first = destList.querySelector('.dest-item[role="option"]');
-        first?.focus();
-        e.preventDefault();
+      function itemHTML(obj) {
+        return `
+          <li class="dest-item" role="option" tabindex="-1"
+              data-city="${obj.city.replace(/"/g, "&quot;")}"
+              data-country="${obj.country.replace(/"/g, "&quot;")}">
+            <span class="material-symbols-outlined">location_on</span>
+            <div>
+              <div class="dest-title">${obj.city}</div>
+              <div class="dest-sub">${obj.country}</div>
+            </div>
+          </li>`;
       }
-    });
-    destList?.addEventListener("click", (e) => {
-      const li = e.target.closest('.dest-item[role="option"]');
-      if (!li) return;
-      const city = li.getAttribute("data-city");
-      const country = li.getAttribute("data-country");
-      state.destination = `${city}, ${country}`;
-      if (destInput) destInput.value = state.destination;
-      closeAll();
-    });
-    destList?.addEventListener("keydown", (e) => {
-      const items = Array.from(destList.querySelectorAll('.dest-item[role="option"]'));
-      const i = items.indexOf(document.activeElement);
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        items[Math.min(i + 1, items.length - 1)]?.focus();
+
+      function renderDestinos(qterm = "") {
+        if (!destList) return;
+        const term = qterm.trim().toLowerCase();
+        const list = term
+          ? destinations.filter((d) =>
+              (d.city + " " + d.country).toLowerCase().includes(term)
+            )
+          : destinations;
+        destList.innerHTML = list.length
+          ? list.map(itemHTML).join("")
+          : `<li class="dest-item-not-found" aria-disabled="true" style="opacity:.6;cursor:default;text-align:center;">
+               <div><div class="dest-title">Nenhum destino encontrado</div><div class="dest-sub">Tente outro termo</div></div>
+             </li>`;
       }
-      if (e.key === "ArrowUp") {
-        e.preventDefault();
-        items[Math.max(i - 1, 0)]?.focus();
+
+      destInput &&
+        destInput.addEventListener("focus", () => renderDestinos(destInput.value));
+      destInput &&
+        destInput.addEventListener("input", () => renderDestinos(destInput.value));
+      destInput &&
+        destInput.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowDown" && destList) {
+            const first = destList.querySelector('.dest-item[role="option"]');
+            first && first.focus();
+            e.preventDefault();
+          }
+        });
+
+      destList &&
+        destList.addEventListener("click", (e) => {
+          const li = e.target.closest('.dest-item[role="option"]');
+          if (!li || !destList.contains(li)) return;
+          const city = li.getAttribute("data-city");
+          const country = li.getAttribute("data-country");
+          state.destination = `${city}, ${country}`;
+          if (destInput) destInput.value = state.destination;
+          if (destValue) destValue.textContent = state.destination;
+          closeAll();
+        });
+
+      destList &&
+        destList.addEventListener("keydown", (e) => {
+          const items = Array.from(
+            destList.querySelectorAll('.dest-item[role="option"]')
+          );
+          const i = items.indexOf(document.activeElement);
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            items[Math.min(i + 1, items.length - 1)]?.focus();
+          }
+          if (e.key === "ArrowUp") {
+            e.preventDefault();
+            items[Math.max(i - 1, 0)]?.focus();
+          }
+          if (e.key === "Enter") {
+            e.preventDefault();
+            document.activeElement && document.activeElement.click();
+          }
+        });
+    })();
+
+    (function setupDates() {
+      const datesWrap = q(".fb-dates");
+      if (!datesWrap) return;
+
+      const label =
+        q(".fb-value", datesWrap) ||
+        q('#dates-value, [id$="dates-value"]', datesWrap) ||
+        q('#dates-value, [id$="dates-value"]', root);
+      const ci =
+        q('#checkin, [data-role="checkin"], [id$="checkin"]', datesWrap) ||
+        q('input[type="date"]', datesWrap);
+      const co =
+        q('#checkout, [data-role="checkout"], [id$="checkout"]', datesWrap) ||
+        (function () {
+          const ds = qa('input[type="date"]', datesWrap);
+          return ds.length > 1 ? ds[1] : null;
+        })();
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const toISO = (d) => d.toISOString().slice(0, 10);
+      const fmt = (s) => {
+        if (!s) return "";
+        const [Y, M, D] = s.split("-");
+        return `${D}/${M}/${Y}`;
+      };
+
+      if (ci) ci.min = toISO(today);
+      if (co) co.min = toISO(today);
+
+      function updateDatesLabel() {
+        if (!label) return;
+        if (state.checkin && state.checkout)
+          label.textContent = `${fmt(state.checkin)} - ${fmt(state.checkout)}`;
+        else if (state.checkin)
+          label.textContent = `${fmt(state.checkin)} - selecionar checkout`;
+        else label.textContent = "Selecione check-in e check-out";
       }
-      if (e.key === "Enter") {
-        e.preventDefault();
-        document.activeElement?.click();
-      }
-    });
 
-    const datesWrap = $(".fb-dates", root);
-    const ci = datesWrap ? $("#checkin", datesWrap) : null;
-    const co = datesWrap ? $("#checkout", datesWrap) : null;
-    const datesValue = datesWrap ? $("#dates-value", datesWrap) : $("#dates-value", root);
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const toISO = (d) => d.toISOString().slice(0, 10);
-    if (ci) ci.min = toISO(today);
-    if (co) co.min = toISO(today);
-    const fmt = (s) => {
-      if (!s) return "";
-      const [Y, M, D] = s.split("-");
-      return `${D}/${M}/${Y}`;
-    };
-
-    function updateDatesLabel() {
-      if (!datesValue) return;
-      if (state.checkin && state.checkout)
-        datesValue.textContent = `${fmt(state.checkin)} — ${fmt(state.checkout)}`;
-      else if (state.checkin)
-        datesValue.textContent = `${fmt(state.checkin)} — selecionar checkout`;
-      else datesValue.textContent = "Selecione check-in e check-out";
-    }
-
-    ci?.addEventListener("change", () => {
-      state.checkin = ci.value;
-      if (state.checkin && co) {
-        const minOut = new Date(state.checkin);
-        minOut.setDate(minOut.getDate() + 1);
-        co.min = toISO(minOut);
-        if (state.checkout && state.checkout <= state.checkin) {
-          state.checkout = "";
-          co.value = "";
+      function setCheckin(val) {
+        state.checkin = val || "";
+        if (co) {
+          if (state.checkin) {
+            const minOut = new Date(state.checkin);
+            minOut.setDate(minOut.getDate() + 1);
+            co.min = toISO(minOut);
+            if (state.checkout && state.checkout <= state.checkin) {
+              state.checkout = "";
+              co.value = "";
+            }
+          } else {
+            co.min = toISO(today);
+          }
         }
-      } else if (co) {
-        co.min = toISO(today);
+        updateDatesLabel();
       }
-      updateDatesLabel();
-    });
-    co?.addEventListener("change", () => {
-      state.checkout = co.value;
-      updateDatesLabel();
-    });
 
-    $('[data-action="clear-dates"]', datesWrap || root)?.addEventListener(
-      "click",
-      (e) => {
+      function setCheckout(val) {
+        state.checkout = val || "";
+        updateDatesLabel();
+      }
+
+      ci && ci.addEventListener("change", (e) => setCheckin(e.target.value));
+      co && co.addEventListener("change", (e) => setCheckout(e.target.value));
+      ci && ci.addEventListener("input", (e) => setCheckin(e.target.value));
+      co && co.addEventListener("input", (e) => setCheckout(e.target.value));
+
+      q('[data-action$="clear-dates"]', datesWrap)?.addEventListener("click", (e) => {
         e.stopPropagation();
         state.checkin = "";
         state.checkout = "";
@@ -217,107 +285,118 @@
           co.min = toISO(today);
         }
         updateDatesLabel();
-      }
-    );
-    $('[data-action="apply-dates"]', datesWrap || root)?.addEventListener(
-      "click",
-      (e) => {
+      });
+
+      q('[data-action$="apply-dates"]', datesWrap)?.addEventListener("click", (e) => {
         e.stopPropagation();
-        closeAll();
-      }
-    );
+        const drop = datesWrap.closest(".fb[data-drop]");
+        if (drop) {
+          const d = q(".fb-drop", drop);
+          const t = q(".fb-trigger", drop);
+          if (d) d.hidden = true;
+          if (t) t.setAttribute("aria-expanded", "false");
+          drop.setAttribute("aria-expanded", "false");
+        }
+      });
 
-    const guestsWrap = $(".fb-guests", root);
-    const guestsValue = guestsWrap
-      ? $("#guests-value", guestsWrap)
-      : $("#guests-value", root);
-    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+      const openBtn = datesWrap.querySelector(".fb-trigger");
+      openBtn &&
+        openBtn.addEventListener("click", () => {
+          setTimeout(() => ci && ci.focus(), 0);
+        });
 
-    function updateGuestsLabel() {
-      if (!guestsValue) return;
-      const a = state.adults,
-        c = state.children,
-        r = state.rooms,
-        pet = state.pet ? " · com pet" : "";
-      guestsValue.textContent = `${a} adulto${a !== 1 ? "s" : ""} · ${c} criança${
-        c !== 1 ? "s" : ""
-      } · ${r} quarto${r !== 1 ? "s" : ""}${pet}`;
-    }
+      updateDatesLabel();
+    })();
 
-    root.addEventListener("click", (e) => {
-      const btn = e.target.closest(".ctr-btn");
-      if (!btn || !root.contains(btn)) return;
-      e.stopPropagation();
-
-      const key = btn.getAttribute("data-ctr");
-      const op = btn.getAttribute("data-op");
-      const map = { adult: "adults", child: "children", room: "rooms" };
-      const limits = { adults: [1, 16], children: [0, 16], rooms: [1, 9] };
-      const stKey = map[key];
-      if (!stKey) return;
-
-      state[stKey] = clamp(
-        state[stKey] + (op === "+" ? 1 : -1),
-        limits[stKey][0],
-        limits[stKey][1]
+    (function setupGuests() {
+      const guestsWrap = q(".fb-guests");
+      if (!guestsWrap) return;
+      const guestsValue = q(
+        '#guests-value, [id$="guests-value"], .fb-guests .fb-value',
+        root
       );
+      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
-      const localWrap = btn.closest(".fb-guests") || guestsWrap || root;
-      let valEl =
-        localWrap.querySelector(`#${key}-val`) ||
-        localWrap.querySelector(`[id$="${key}-val"]`) ||
-        $(`#${key}-val`, root);
-      if (valEl) valEl.textContent = state[stKey];
+      function updateGuestsLabel() {
+        if (!guestsValue) return;
+        const a = state.adults,
+          c = state.children,
+          r = state.rooms,
+          pet = state.pet ? " · com pet" : "";
+        guestsValue.textContent = `${a} adulto${a !== 1 ? "s" : ""} · ${c} criança${
+          c !== 1 ? "s" : ""
+        } · ${r} quarto${r !== 1 ? "s" : ""}${pet}`;
+      }
 
-      updateGuestsLabel();
-    });
+      root.addEventListener("click", (e) => {
+        const btn = e.target.closest(".ctr-btn");
+        if (!btn || !root.contains(btn)) return;
+        e.stopPropagation();
+        const key = btn.getAttribute("data-ctr");
+        const op = btn.getAttribute("data-op");
+        const map = { adult: "adults", child: "children", room: "rooms" };
+        const limits = { adults: [1, 16], children: [0, 16], rooms: [1, 9] };
+        const stKey = map[key];
+        if (!stKey) return;
+        state[stKey] = clamp(
+          state[stKey] + (op === "+" ? 1 : -1),
+          limits[stKey][0],
+          limits[stKey][1]
+        );
+        const wrap = btn.closest(".fb-guests") || guestsWrap || root;
+        const valEl =
+          q(`#${key}-val`, wrap) ||
+          q(`[data-role="${key}-val"]`, wrap) ||
+          q(`[id$="${key}-val"]`, wrap);
+        if (valEl) valEl.textContent = state[stKey];
+        updateGuestsLabel();
+      });
 
-    const petToggle = guestsWrap ? $("#has-pet", guestsWrap) : $("#has-pet", root);
-    petToggle?.addEventListener("change", (e) => {
-      e.stopPropagation();
-      state.pet = e.target.checked;
-      updateGuestsLabel();
-    });
+      root.addEventListener("change", (e) => {
+        const tgl = e.target.closest("#has-pet, [data-role='has-pet'], [id$='has-pet']");
+        if (!tgl || !root.contains(tgl)) return;
+        e.stopPropagation();
+        state.pet = !!tgl.checked;
+        updateGuestsLabel();
+      });
 
-    $('[data-action="clear-guests"]', guestsWrap || root)?.addEventListener(
-      "click",
-      (e) => {
+      q('[data-action$="clear-guests"]', guestsWrap)?.addEventListener("click", (e) => {
         e.stopPropagation();
         state.adults = 2;
         state.children = 0;
         state.rooms = 1;
         state.pet = false;
-
-        const wrap = guestsWrap || root;
-        const aEl = wrap.querySelector("#adult-val");
+        const gw = guestsWrap || root;
+        const aEl = q("#adult-val, [data-role='adult-val'], [id$='adult-val']", gw);
         if (aEl) aEl.textContent = 2;
-        const cEl = wrap.querySelector("#child-val");
+        const cEl = q("#child-val, [data-role='child-val'], [id$='child-val']", gw);
         if (cEl) cEl.textContent = 0;
-        const rEl = wrap.querySelector("#room-val");
+        const rEl = q("#room-val, [data-role='room-val'], [id$='room-val']", gw);
         if (rEl) rEl.textContent = 1;
-        const pEl = wrap.querySelector("#has-pet");
+        const pEl = q("#has-pet, [data-role='has-pet'], [id$='has-pet']", gw);
         if (pEl) pEl.checked = false;
-
         updateGuestsLabel();
-      }
-    );
-    $('[data-action="apply-guests"]', guestsWrap || root)?.addEventListener(
-      "click",
-      (e) => {
+      });
+
+      q('[data-action$="apply-guests"]', guestsWrap)?.addEventListener("click", (e) => {
         e.stopPropagation();
         closeAll();
-      }
+      });
+
+      updateGuestsLabel();
+    })();
+
+    const searchBtn = q(
+      '#search-btn, [id$="search-btn"], [data-role="search-btn"]',
+      root
     );
-
-    $("#search-btn", root)?.addEventListener("click", () => {
-      console.log("[PESQUISAR]", roomSelector, JSON.stringify(state, null, 2));
-      if (!state.destination) return alert("Escolha um destino.");
-      if (!state.checkin || !state.checkout) return alert("Selecione as datas.");
-      alert("Buscando… veja os parâmetros no console.");
-    });
-
-    updateDatesLabel();
-    updateGuestsLabel();
+    searchBtn &&
+      searchBtn.addEventListener("click", () => {
+        if (!state.destination) return alert("Escolha um destino.");
+        if (!state.checkin || !state.checkout) return alert("Selecione as datas.");
+        console.log("[PESQUISAR]", roomSelector, JSON.stringify(state, null, 2));
+        alert("Buscando… veja os parâmetros no console.");
+      });
 
     return {
       getState: () => ({ ...state }),

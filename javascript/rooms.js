@@ -6,6 +6,32 @@
     return {};
   }
 
+  // Util: navegar no roteador do documento pai (index.html) quando estiver dentro do iframe
+  function navigateViaParentHash(url) {
+    const isIframe = window.parent && window.parent !== window;
+    const targetWin = isIframe ? window.parent : window;
+
+    if (!url) return;
+
+    // Se houver API pública do Router, use-a (mais elegante)
+    if (url.startsWith("#/")) {
+      const hash = url; // ex: "#/your-data?room=dbl-std"
+      if (targetWin.Router && typeof targetWin.Router.navigate === "function") {
+        const withoutHash = hash.slice(1); // "/your-data?room=dbl-std"
+        const [pathname, qs] = withoutHash.split("?");
+        const params = new URLSearchParams(qs || "");
+        targetWin.Router.navigate(pathname, params);
+      } else {
+        // fallback: altera o hash da janela alvo
+        targetWin.location.hash = hash;
+      }
+      return;
+    }
+
+    // Caso seja uma URL "normal" (http/arquivo local), abre do jeito padrão
+    window.open(url, "_self");
+  }
+
   window.initRooms = function initRooms({
     rootSelector = "#rooms",
     data,
@@ -98,8 +124,8 @@
           : labels.action || "Visualizar preços";
       btn.addEventListener("click", () => {
         const url = (room.cta && room.cta.url) || room.url || "#";
-        const tgt = (room.cta && room.cta.target) || "_self";
-        if (url && url !== "#") window.open(url, tgt);
+        if (!url || url === "#") return;
+        navigateViaParentHash(url);
       });
       cellAction.appendChild(btn);
 
@@ -125,7 +151,6 @@
     };
 
     window.sortRoomsByCapacityAsc = () => sortByCapacity(true);
-
     window.sortRoomsByCapacityDesc = () => sortByCapacity(false);
 
     function sortByCapacity(asc = true) {

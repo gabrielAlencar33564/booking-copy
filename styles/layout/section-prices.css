@@ -42,8 +42,6 @@
     border-radius: 6px;
     overflow: hidden;
     background: var(--bg);
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue",
-      Arial, sans-serif;
   }
 
   .rooms__head {
@@ -109,10 +107,14 @@
     align-items: center;
   }
 
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     .prices .filtered .filtered-content {
       grid-template-columns: 1fr;
       height: auto;
+    }
+
+    .rooms {
+      margin: 8px 0;
     }
 
     .rooms,
@@ -126,7 +128,7 @@
     .rooms__row {
       grid-template-columns: 1fr;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: 8px;
       margin: 10px 0;
       overflow: hidden;
     }

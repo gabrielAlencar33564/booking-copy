@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,0"
+    />
+    <link rel="stylesheet" href="../styles/main.css" />
+    <link rel="stylesheet" href="../styles/layout/home-page.css" />
+  </head>
+  <body class="home-page">
+    <header class="header-container">
+      <div class="header-content">
+        <div class="primary">
+          <div class="logo" id="logo-header">Logo</div>
+
+          <button class="btn u-primary-btn variant-one">BRL</button>
+          <button class="btn u-primary-btn variant-one">
+            <span class="material-symbols-outlined"> flag_circle </span>
+          </button>
+          <button class="btn u-primary-btn variant-one">
+            <span class="material-symbols-outlined"> help </span>
+          </button>
+          <button class="btn u-primary-btn variant-one">Anuncie sua propriedade</button>
+        </div>
+
+        <nav class="services" aria-label="Serviços">
+          <div class="services-content">
+            <a href="#" class="u-primary-btn variant-two is-active">
+              <span class="material-symbols-outlined"> bed </span>
+              <span>Hospedagens</span>
+            </a>
+
+            <a href="#" class="u-primary-btn variant-two">
+              <span class="material-symbols-outlined"> travel </span>
+              <span>Voos</span>
+            </a>
+
+            <a href="#" class="u-primary-btn variant-two">
+              <span class="material-symbols-outlined"> directions_car </span>
+              <span>Aluguel de carros</span>
+            </a>
+
+            <a href="#" class="u-primary-btn variant-two">
+              <span class="material-symbols-outlined"> attractions </span>
+              <span>Atrações</span>
+            </a>
+
+            <a href="#" class="u-primary-btn variant-two">
+              <span class="material-symbols-outlined"> multiple_airports </span>
+              <span>Táxis (aeroporto)</span>
+            </a>
+          </div>
+        </nav>
+      </div>
+
+      <div class="filtered">
+        <div class="filtered-content" id="filters">
+          <div class="filter-button fb fb-destination" data-drop aria-expanded="false">
+            <button
+              class="fb-trigger fb-trigger--input"
+              type="button"
+              aria-haspopup="listbox"
+              aria-expanded="false"
+              aria-controls="drop-destination"
+            >
+              <span class="material-symbols-outlined fb-icon"> bed </span>
+              <input
+                id="dest-input"
+                class="fb-text"
+                type="text"
+                placeholder="Para onde você vai?"
+                autocomplete="off"
+                aria-autocomplete="list"
+                aria-controls="dest-list"
+              />
+            </button>
+
+            <div
+              class="fb-drop fb-drop--dest"
+              id="drop-destination"
+              role="listbox"
+              aria-labelledby="dest-input"
+              hidden
+            >
+              <div class="drop-header">Destinos em alta</div>
+              <ul class="dest-list" id="dest-list"></ul>
+            </div>
+          </div>
+
+          <div class="filter-button fb fb-dates" data-drop aria-expanded="false">
+            <button
+              class="fb-trigger"
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="drop-dates"
+            >
+              <span class="material-symbols-outlined fb-icon"> calendar_month </span>
+              <span class="fb-value" id="dates-value"
+                >Selecione check-in e check-out</span
+              >
+            </button>
+            <div
+              class="fb-drop fb-drop--dates"
+              id="drop-dates"
+              role="dialog"
+              aria-labelledby="dates-value"
+              hidden
+            >
+              <div class="fb-dates-row">
+                <label class="fb-date-field">
+                  <span>Check-in</span>
+                  <input type="date" id="checkin" />
+                </label>
+                <label class="fb-date-field">
+                  <span>Check-out</span>
+                  <input type="date" id="checkout" />
+                </label>
+              </div>
+              <div class="fb-actions">
+                <button class="btn btn-secondary" type="button" data-action="clear-dates">
+                  Limpar
+                </button>
+                <button class="btn btn-primary" type="button" data-action="apply-dates">
+                  Aplicar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-button fb fb-guests" data-drop aria-expanded="false">
+            <button
+              class="fb-trigger"
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="drop-guests"
+            >
+              <span class="material-symbols-outlined"> person </span>
+              <span class="fb-value" id="guests-value">
+                2 adultos · 0 crianças · 1 quarto
+              </span>
+            </button>
+
+            <div
+              class="fb-drop fb-drop--guests"
+              id="drop-guests"
+              role="dialog"
+              aria-labelledby="guests-value"
+              hidden
+            >
+              <div class="g-list">
+                <div class="g-row">
+                  <span class="g-label">Adultos</span>
+                  <div class="g-box">
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="adult"
+                      data-op="-"
+                      aria-label="Diminuir adultos"
+                    >
+                      −
+                    </button>
+                    <output class="g-val ctr-val" id="adult-val">2</output>
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="adult"
+                      data-op="+"
+                      aria-label="Aumentar adultos"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div class="g-row">
+                  <span class="g-label">Crianças</span>
+                  <div class="g-box">
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="child"
+                      data-op="-"
+                      aria-label="Diminuir crianças"
+                    >
+                      −
+                    </button>
+                    <output class="g-val ctr-val" id="child-val">0</output>
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="child"
+                      data-op="+"
+                      aria-label="Aumentar crianças"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div class="g-row">
+                  <span class="g-label">Quartos</span>
+                  <div class="g-box">
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="room"
+                      data-op="-"
+                      aria-label="Diminuir quartos"
+                    >
+                      −
+                    </button>
+                    <output class="g-val ctr-val" id="room-val">1</output>
+                    <button
+                      class="g-btn ctr-btn"
+                      type="button"
+                      data-ctr="room"
+                      data-op="+"
+                      aria-label="Aumentar quartos"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <hr class="g-hr" />
+
+                <div class="g-row g-row--switch">
+                  <span class="g-label">Viajando com pets?</span>
+                  <label class="g-switch">
+                    <input type="checkbox" id="has-pet" />
+                    <span class="g-slider" aria-hidden="true"></span>
+                  </label>
+                </div>
+
+                <p class="g-note">
+                  Animais de serviço não são considerados pets.
+                  <a href="#" class="g-link"
+                    >Leia mais sobre viagens com animais de serviço</a
+                  >
+                </p>
+
+                <div class="g-actions">
+                  <button
+                    class="g-ok btn btn-primary"
+                    type="button"
+                    data-action="apply-guests"
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary search-button" id="search-btn">Pesquisar</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <nav class="bk-tabs" aria-label="Seções da página">
+        <a class="bk-tab is-active" href="#overview">Visão geral</a>
+        <a class="bk-tab" href="#prices">Informações e preços</a>
+        <a class="bk-tab" href="#amenities">Comodidades</a>
+        <a class="bk-tab" href="#rules">Regras da casa</a>
+        <a class="bk-tab" href="#legal">Informações importantes e jurídicas</a>
+        <a class="bk-tab" href="#reviews"
+          >Avaliações de hóspedes <span class="muted">(114)</span></a
+        >
+      </nav>
+
+      <section id="overview" class="overview page-container">
+        <div class="page-content">
+          <div class="overview-header">
+            <div class="overview-header-left">
+              <h1 class="title"></h1>
+              <div class="overview-address"></div>
+            </div>
+
+            <div class="overview-header-right">
+              <div class="action-buttons">
+                <button class="btn btn-overlay" type="button" aria-label="Salvar">
+                  <span class="ms">favorite</span>
+                </button>
+                <button class="btn btn-overlay" type="button" aria-label="Compartilhar">
+                  <span class="ms">share</span>
+                </button>
+                <button class="btn btn-primary">Reservar agora</button>
+              </div>
+
+              <button class="btn btn-overlay" type="button">
+                <span class="ms">sell</span>
+                <span>Cobrimos o menor preço!</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="overview-grid">
+            <div class="gallery-grid-layout" id="gallery">
+              <div class="gallery-main-grid" id="gallery-main"></div>
+              <div class="gallery-sub-grid" id="gallery-sub"></div>
+
+              <div class="loved-buttons">
+                <button class="rv-prev" aria-label="Anterior">
+                  <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button class="rv-next" aria-label="Próximo">
+                  <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="details-grid">
+              <div id="review-card" class="review-card">
+                <div class="rc-head">
+                  <div class="rc-head-title">
+                    <p class="rc-head-title-title"></p>
+                    <p class="rc-head-title-subtitle"></p>
+                  </div>
+                  <div class="review-badge rc-badge"></div>
+                </div>
+
+                <div class="rc-content">
+                  <p class="rc-content-title"></p>
+                  <p class="rc-content-review-description"></p>
+                  <div class="rc-reviewer">
+                    <div class="avatar" aria-hidden="true"></div>
+                    <div class="who">
+                      <strong class="rc-name"></strong>
+                      <span class="flag"></span>
+                      <span class="country"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rc-bottom">
+                  <div class="label"></div>
+                  <div class="review-badge rc-badge--alt"></div>
+                </div>
+
+                <div class="rc-arrows" aria-hidden="true">
+                  <button class="rc-arrow rc-prev" aria-label="Anterior">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                  </button>
+                  <button class="rc-arrow rc-next" aria-label="Próximo">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="maps" id="maps"></div>
+            </div>
+          </div>
+
+          <div class="gm-overlay" id="galleryModal" aria-hidden="true">
+            <div
+              class="gm-dialog"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="gm-title"
+            >
+              <header class="gm-header">
+                <h2 id="gm-title">Suítes Viver Arraial do Cabo</h2>
+                <div class="gm-actions">
+                  <button class="btn btn-primary" type="button" aria-label="Fechar">
+                    Reservar agora
+                  </button>
+
+                  <button class="btn gm-close" type="button" aria-label="Fechar">
+                    <span class="ms" aria-hidden="true">close</span>
+                  </button>
+                </div>
+              </header>
+
+              <div class="gm-content">
+                <div class="gm-gallery" id="gm-grid"></div>
+
+                <div class="gm-aside" id="gm-aside">
+                  <div class="gm-score">
+                    <div class="review-badge gm-score-badge" id="gm-badge">0,0</div>
+                    <div class="gm-score-info">
+                      <p class="gm-score-label" id="gm-label">—</p>
+                      <p class="gm-score-count" id="gm-count">0 avaliações</p>
+                    </div>
+                  </div>
+
+                  <ul class="gm-review-list" id="gm-review-list">
+                    <li class="gm-review-title" id="gm-review-title">
+                      Os hóspedes amaram ficar aqui
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="overview-info">
+            <div class="overview-info-left"></div>
+            <div class="overview-info-right">
+              <h4 class="highlights-title"></h4>
+              <p class="highlight-row">
+                <span class="material-symbols-outlined"> location_on </span>
+                <span></span>
+              </p>
+              <button class="btn btn-primary highlights-cta" type="button"></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="prices" class="prices page-container">
+        <div class="page-content">
+          <div class="availability">
+            <div class="title-content">
+              <h1 class="title">Disponibilidade</h1>
+              <button class="btn btn-overlay">Cobrimos o menor preço!</button>
+            </div>
+
+            <p class="alert">
+              <span class="material-symbols-outlined"> error </span>
+              Selecione as datas para conferir a disponibilidade e os preços desta
+              acomodação
+            </p>
+
+            <div class="filtered">
+              <div class="filtered-content" id="filters-mini">
+                <div class="filter-button fb fb-dates" data-drop aria-expanded="false">
+                  <button
+                    class="fb-trigger"
+                    type="button"
+                    aria-haspopup="dialog"
+                    aria-expanded="false"
+                    aria-controls="mini-drop-dates"
+                  >
+                    <span class="material-symbols-outlined fb-icon">
+                      calendar_month
+                    </span>
+                    <span class="fb-value" id="mini-dates-value"
+                      >Selecione check-in e check-out</span
+                    >
+                  </button>
+
+                  <div
+                    class="fb-drop fb-drop--dates"
+                    id="mini-drop-dates"
+                    role="dialog"
+                    aria-labelledby="mini-dates-value"
+                    hidden
+                  >
+                    <div class="fb-dates-row">
+                      <label class="fb-date-field">
+                        <span>Check-in</span>
+                        <input type="date" id="mini-checkin" />
+                      </label>
+                      <label class="fb-date-field">
+                        <span>Check-out</span>
+                        <input type="date" id="mini-checkout" />
+                      </label>
+                    </div>
+                    <div class="fb-actions">
+                      <button
+                        class="btn btn-secondary"
+                        type="button"
+                        data-action="mini-clear-dates"
+                      >
+                        Limpar
+                      </button>
+                      <button
+                        class="btn btn-primary"
+                        type="button"
+                        data-action="mini-apply-dates"
+                      >
+                        Aplicar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="filter-button fb fb-guests" data-drop aria-expanded="false">
+                  <button
+                    class="fb-trigger"
+                    type="button"
+                    aria-haspopup="dialog"
+                    aria-expanded="false"
+                    aria-controls="mini-drop-guests"
+                  >
+                    <span class="material-symbols-outlined fb-icon"> person </span>
+                    <span class="fb-value" id="mini-guests-value"
+                      >2 adultos · 0 crianças · 1 quarto</span
+                    >
+                  </button>
+
+                  <div
+                    class="fb-drop fb-drop--guests"
+                    id="mini-drop-guests"
+                    role="dialog"
+                    aria-labelledby="mini-guests-value"
+                    hidden
+                  >
+                    <div class="g-list">
+                      <div class="g-row">
+                        <span class="g-label">Adultos</span>
+                        <div class="g-box">
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="adult"
+                            data-op="-"
+                            aria-label="Diminuir adultos"
+                          >
+                            −
+                          </button>
+                          <output class="g-val ctr-val" id="mini-adult-val">2</output>
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="adult"
+                            data-op="+"
+                            aria-label="Aumentar adultos"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="g-row">
+                        <span class="g-label">Crianças</span>
+                        <div class="g-box">
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="child"
+                            data-op="-"
+                            aria-label="Diminuir crianças"
+                          >
+                            −
+                          </button>
+                          <output class="g-val ctr-val" id="mini-child-val">0</output>
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="child"
+                            data-op="+"
+                            aria-label="Aumentar crianças"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="g-row">
+                        <span class="g-label">Quartos</span>
+                        <div class="g-box">
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="room"
+                            data-op="-"
+                            aria-label="Diminuir quartos"
+                          >
+                            −
+                          </button>
+                          <output class="g-val ctr-val" id="mini-room-val">1</output>
+                          <button
+                            class="g-btn ctr-btn"
+                            type="button"
+                            data-ctr="room"
+                            data-op="+"
+                            aria-label="Aumentar quartos"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      <hr class="g-hr" />
+
+                      <div class="g-row g-row--switch">
+                        <span class="g-label">Viajando com pets?</span>
+                        <label class="g-switch">
+                          <input type="checkbox" id="mini-has-pet" />
+                          <span class="g-slider" aria-hidden="true"></span>
+                        </label>
+                      </div>
+
+                      <p class="g-note">
+                        Animais de serviço não são considerados pets.
+                        <a href="#" class="g-link"
+                          >Leia mais sobre viagens com animais de serviço</a
+                        >
+                      </p>
+
+                      <div class="g-actions">
+                        <button
+                          class="g-ok btn btn-primary"
+                          type="button"
+                          data-action="mini-apply-guests"
+                        >
+                          OK
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="btn btn-primary search-button" id="mini-search-btn">
+                  Pesquisar
+                </button>
+              </div>
+            </div>
+
+            <div class="rooms" id="rooms">
+              <div class="rooms__head">
+                <div class="rooms__col rooms__col--type">Tipo de quarto</div>
+                <div class="rooms__col rooms__col--people">Quantas pessoas?</div>
+                <div class="rooms__col rooms__col--action"></div>
+              </div>
+            </div>
+
+            <p class="warning">
+              <span class="material-symbols-outlined"> error </span>
+              A legislação brasileira permite que você cancele gratuitamente até 7 dias
+              após o momento da reserva. Depois desse período, será aplicada a política de
+              cancelamento escolhida.
+            </p>
+          </div>
+
+          <div id="reviews" class="reviews">
+            <div class="title-content">
+              <h1 class="title"></h1>
+              <button class="btn btn-primary"></button>
+            </div>
+
+            <div class="rev-sum__score">
+              <span class="review-badge rev-sum__badge"></span>
+              <div class="rev-sum__meta">
+                <p class="rev-sum__label"></p>
+                <a class="link" href="#" rel="nofollow noopener">
+                  Ler todas as avaliações
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="topics__label">Categorias:</h3>
+              <div class="rev-sum__grid">
+                <ul class="rev-sum__list"></ul>
+                <ul class="rev-sum__list"></ul>
+                <ul class="rev-sum__list"></ul>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="topics__label">Selecione os tópicos para ler as avaliações:</h3>
+              <div
+                class="topics__wrap"
+                role="listbox"
+                aria-label="Tópicos das avaliações"
+              ></div>
+            </div>
+
+            <div>
+              <h3 class="topics__label">Os hóspedes amaram ficar aqui</h3>
+
+              <div class="loved-container" id="loved">
+                <div class="loved-buttons">
+                  <button class="rv-prev" aria-label="Anterior">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                  </button>
+                  <button class="rv-next" aria-label="Próximo">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                  </button>
+                </div>
+
+                <div class="loved-wrap">
+                  <div class="loved-track" id="lovedTrack" aria-live="polite"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary-outline loved-buttom-more">
+              Ler todas as avaliações
+            </button>
+          </div>
+
+          <div id="faq" class="faq">
+            <div class="title-content">
+              <h1 class="title"></h1>
+              <button class="btn btn-primary"></button>
+            </div>
+
+            <div class="faq-grid"></div>
+
+            <button class="btn btn-primary-outline"></button>
+          </div>
+
+          <div class="nearby">
+            <div class="title-content">
+              <h1 class="title">Proximidades do hotel</h1>
+              <button class="btn btn-primary">Veja a disponibilidade</button>
+            </div>
+            <a href="#" class="link">Localização excelente - mostrar o mapa</a>
+
+            <div class="nearby-grid">
+              <div class="nearby-col">
+                <h3 class="nearby-title">
+                  <span class="ms">explore</span>
+                  O que há por perto?
+                </h3>
+                <ul class="nearby-list">
+                  <li><span>Museu Oceanográfico</span><em>200 m</em></li>
+                  <li><span>Praça da Cova</span><em>250 m</em></li>
+                  <li><span>Praça da Independência</span><em>1 km</em></li>
+                  <li><span>Parque Público Hermes Barcellos</span><em>1,4 km</em></li>
+                  <li><span>Parque Velho</span><em>1,6 km</em></li>
+                  <li><span>Pontal do Atalaia</span><em>1,7 km</em></li>
+                  <li><span>RESEX Marinha de Arraial do Cabo</span><em>3,1 km</em></li>
+                  <li><span>Praça Alfredo Castro</span><em>10 km</em></li>
+                  <li><span>Praça das Águas</span><em>12 km</em></li>
+                  <li><span>Parque Fonte do Itajuru</span><em>12 km</em></li>
+                </ul>
+              </div>
+
+              <div class="nearby-col">
+                <h3 class="nearby-title">
+                  <span class="ms">restaurant</span>
+                  Restaurantes e cafés
+                </h3>
+                <ul class="nearby-list">
+                  <li><span>Restaurante • Restaurante à Mineira</span><em>40 m</em></li>
+                  <li><span>Restaurante • Restaurante Tio Dorp</span><em>200 m</em></li>
+                  <li><span>Restaurante • Saint Tropez</span><em>250 m</em></li>
+                </ul>
+              </div>
+
+              <div class="nearby-col">
+                <h4 class="nearby-subtitle">
+                  <span class="ms">star</span> Principais atrações
+                </h4>
+                <ul class="nearby-list">
+                  <li><span>Museu do Surfe</span><em>12 km</em></li>
+                  <li><span>Praça da Água</span><em>12 km</em></li>
+                  <li><span>Praça Porto Rocha</span><em>13 km</em></li>
+                  <li><span>Forte São Mateus</span><em>14 km</em></li>
+                </ul>
+              </div>
+
+              <div class="nearby-col">
+                <h3 class="nearby-title">
+                  <span class="ms">beach_access</span>
+                  Praias na vizinhança
+                </h3>
+                <ul class="nearby-list">
+                  <li><span>Praia dos Anjos</span><em>150 m</em></li>
+                  <li><span>Praia do Forno</span><em>850 m</em></li>
+                  <li><span>Praia Grande</span><em>1,4 km</em></li>
+                  <li><span>Prainha</span><em>1,7 km</em></li>
+                  <li><span>Praia da Graçainha</span><em>1,9 km</em></li>
+                </ul>
+              </div>
+
+              <div class="nearby-col">
+                <h3 class="nearby-title">
+                  <span class="ms">directions_bus</span>
+                  Transporte público
+                </h3>
+                <ul class="nearby-list">
+                  <li><span>Ônibus • Terminal Rodoviário</span><em>600 m</em></li>
+                </ul>
+              </div>
+
+              <div class="nearby-col">
+                <h3 class="nearby-title">
+                  <span class="ms">flight_takeoff</span>
+                  Aeroportos mais próximos
+                </h3>
+                <ul class="nearby-list">
+                  <li><span>Aeroporto de Cabo Frio</span><em>8 km</em></li>
+                  <li><span>Aeroporto de Macaé</span><em>93 km</em></li>
+                </ul>
+              </div>
+            </div>
+            <p class="nearby-alert">
+              É exibida uma estimativa das distâncias mais curtas de caminhada ou de
+              carro. As distâncias reais podem variar.
+            </p>
+            <p class="missing-information">
+              Sente falta de alguma informação?
+              <a href="#" class="link">Sim</a>
+              <strong>/</strong>
+              <a href="#" class="link">Não</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="amenities" class="amenities page-container">
+        <div class="page-content">
+          <div class="amenities-content">
+            <div class="title-content">
+              <h1 class="title">Comodidades de Suítes Viver Arraial do Cabo</h1>
+              <button class="btn btn-primary">Veja a disponibilidade</button>
+            </div>
+            <p class="amenities-score">Ótimas comodidades! Pontuação: 9,3</p>
+
+            <h3 class="amenities-inline__title">Ótimo para sua estadia</h3>
+            <ul class="amenities-inline__list">
+              <li class="amenity">
+                <span class="ms amenity__icon">ac_unit</span>
+                <span>Ar-condicionado</span>
+              </li>
+              <li class="amenity">
+                <span class="ms amenity__icon">bathroom</span>
+                <span>Banheiro privativo</span>
+              </li>
+              <li class="amenity">
+                <span class="ms amenity__icon">wifi</span>
+                <span>Wi-Fi gratuito</span>
+              </li>
+              <li class="amenity">
+                <span class="ms amenity__icon">tv</span>
+                <span>TV de tela plana</span>
+              </li>
+              <li class="amenity">
+                <span class="ms amenity__icon">tour</span>
+                <span>Balcão de turismo</span>
+              </li>
+              <li class="amenity">
+                <span class="ms amenity__icon">shower</span>
+                <span>Chuveiro</span>
+              </li>
+              <li class="amenity">
+                <span class="ms amenity__icon">kitchen</span>
+                <span>Frigobar</span>
+              </li>
+            </ul>
+
+            <div class="amenities-grid">
+              <div class="amen-col">
+                <h3 class="amen-cat">
+                  <span class="ms">hotel_class</span>
+                  Principais comodidades
+                </h3>
+                <ul class="amen-list">
+                  <li>Wi-Fi gratuito</li>
+                  <li>Ar-condicionado</li>
+                </ul>
+
+                <h3 class="amen-cat">
+                  <span class="ms">bathroom</span>
+                  Banheiro
+                </h3>
+                <ul class="amen-list">
+                  <li>Papel higiênico</li>
+                  <li>Toalhas</li>
+                  <li>Bidê</li>
+                  <li>Banheiro privativo</li>
+                  <li>Vaso sanitário</li>
+                  <li>Chuveiro</li>
+                </ul>
+
+                <h3 class="amen-cat">
+                  <span class="ms">bed</span>
+                  Quarto
+                </h3>
+                <ul class="amen-list">
+                  <li>Roupa de cama</li>
+                </ul>
+
+                <h3 class="amen-cat">
+                  <span class="ms">landscape</span>
+                  Vista
+                </h3>
+                <ul class="amen-list">
+                  <li>Vista da cidade</li>
+                </ul>
+              </div>
+
+              <div class="amen-col">
+                <h3 class="amen-cat">
+                  <span class="ms">chair_alt</span>
+                  Comodidades do quarto
+                </h3>
+                <ul class="amen-list">
+                  <li>Tomada perto da cama</li>
+                </ul>
+
+                <h3 class="amen-cat">
+                  <span class="ms">tv</span>
+                  Mídia / Tecnologia
+                </h3>
+                <ul class="amen-list">
+                  <li>Serviço de streaming (como Netflix)</li>
+                  <li>TV de tela plana</li>
+                  <li>Canais via satélite</li>
+                  <li>TV</li>
+                </ul>
+
+                <h3 class="amen-cat">
+                  <span class="ms">restaurant</span>
+                  Alimentos e bebidas
+                </h3>
+                <ul class="amen-list">
+                  <li>Frigobar</li>
+                </ul>
+
+                <h3 class="amen-cat">
+                  <span class="ms">wifi</span>
+                  Internet
+                </h3>
+                <p class="amen-note">
+                  Acesso Wi-Fi disponível em todas as áreas, gratuitamente.
+                </p>
+
+                <h3 class="amen-cat">
+                  <span class="ms">local_parking</span>
+                  Estacionamento
+                </h3>
+                <p class="amen-note">Sem estacionamento disponível.</p>
+              </div>
+
+              <div class="amen-col">
+                <h3 class="amen-cat">
+                  <span class="ms">room_service</span>
+                  Serviços
+                </h3>
+                <ul class="amen-list">
+                  <li>Serviço de concierge</li>
+                  <li>Balcão de turismo</li>
+                </ul>
+
+                <h3 class="amen-cat">
+                  <span class="ms">verified_user</span>
+                  Segurança
+                </h3>
+                <ul class="amen-list">
+                  <li>Chave de acesso</li>
+                </ul>
+
+                <h3 class="amen-cat">
+                  <span class="ms">dehaze</span>
+                  Geral
+                </h3>
+                <ul class="amen-list">
+                  <li>Ar-condicionado</li>
+                  <li>Proibido fumar em todas as áreas</li>
+                  <li>Piso de mármore/azulejo</li>
+                </ul>
+
+                <h3 class="amen-cat">
+                  <span class="ms">accessible</span>
+                  Acessibilidade
+                </h3>
+                <ul class="amen-list">
+                  <li>Andares superiores acessíveis somente por escada</li>
+                </ul>
+
+                <h3 class="amen-cat">
+                  <span class="ms">translate</span>
+                  Idiomas falados
+                </h3>
+                <ul class="amen-list">
+                  <li>Português</li>
+                </ul>
+              </div>
+            </div>
+            <p class="missing-information">
+              Sente falta de alguma informação?
+              <a href="#" class="link">Sim</a>
+              <strong>/</strong>
+              <a href="#" class="link">Não</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="rules" class="rules page-container">
+        <div class="page-content">
+          <div class="rules-content">
+            <div class="title-content">
+              <h1 class="title">Regras da casa</h1>
+              <button class="btn btn-primary">Veja a disponibilidade</button>
+            </div>
+            <p>
+              Suítes Viver Arraial do Cabo aceita pedidos especiais - adicione no próximo
+              passo!
+            </p>
+
+            <div class="rules-box">
+              <div class="rule-row">
+                <div class="rule-left">
+                  <span class="ms">login</span>
+                  <h4 class="rule-title">Entrada</h4>
+                </div>
+                <div class="rule-right">
+                  <p><strong>Das 14:00 às 22:00</strong></p>
+                  <p>
+                    Os hóspedes devem apresentar um documento com foto e cartão de crédito
+                    no momento do check-in.
+                  </p>
+                  <p>Informe o horário de sua chegada à acomodação com antecedência.</p>
+                </div>
+              </div>
+
+              <div class="rule-row">
+                <div class="rule-left">
+                  <span class="ms">logout</span>
+                  <h4 class="rule-title">Saída</h4>
+                </div>
+                <div class="rule-right">
+                  <p><strong>Até 11:00</strong></p>
+                </div>
+              </div>
+
+              <div class="rule-row">
+                <div class="rule-left">
+                  <span class="ms">receipt_long</span>
+                  <h4 class="rule-title">Cancelamento/ pré-pagamento</h4>
+                </div>
+                <div class="rule-right">
+                  <p>
+                    As políticas de cancelamento e pré-pagamento variam de acordo com o
+                    tipo de acomodação. Por favor,
+                    <a href="#">insira as datas da sua estadia</a> e verifique as
+                    condições da opção escolhida.
+                  </p>
+                </div>
+              </div>
+
+              <div class="rule-row">
+                <div class="rule-left">
+                  <span class="ms">diversity_3</span>
+                  <h4 class="rule-title">Crianças e camas</h4>
+                </div>
+                <div class="rule-right">
+                  <h5 class="rule-subtitle">Políticas para crianças</h5>
+                  <p>Crianças de qualquer idade são bem-vindas.</p>
+                  <p>
+                    Crianças a partir de 6 anos serão cobradas como adultos nesta
+                    acomodação.
+                  </p>
+                  <p>
+                    Para ver os preços e as informações de ocupação certos, informe
+                    quantas crianças fazem parte do seu grupo e a idade delas.
+                  </p>
+
+                  <h5 class="rule-subtitle">Políticas para berços e camas extras</h5>
+                  <p>Berços e camas extras não estão disponíveis nesta acomodação.</p>
+                </div>
+              </div>
+
+              <div class="rule-row">
+                <div class="rule-left">
+                  <span class="ms">block</span>
+                  <h4 class="rule-title">Restrições de idade</h4>
+                </div>
+                <div class="rule-right">
+                  <p>A idade mínima para check-in é <strong>18</strong></p>
+                </div>
+              </div>
+
+              <div class="rule-row">
+                <div class="rule-left">
+                  <span class="ms">pets</span>
+                  <h4 class="rule-title">Pets</h4>
+                </div>
+                <div class="rule-right">
+                  <p>Pets não permitidos.</p>
+                </div>
+              </div>
+
+              <div class="rule-row">
+                <div class="rule-left">
+                  <span class="ms">credit_card</span>
+                  <h4 class="rule-title">Pagamentos via Booking.com</h4>
+                </div>
+                <div class="rule-right">
+                  <p>
+                    A Booking.com coletará o pagamento desta hospedagem em nome do hotel;
+                    porém, certifique-se de levar dinheiro para cobrir quaisquer extras
+                    quando chegar lá.
+                  </p>
+                </div>
+              </div>
+
+              <div class="rule-row">
+                <div class="rule-left">
+                  <span class="ms">celebration</span>
+                  <h4 class="rule-title">Festas</h4>
+                </div>
+                <div class="rule-right">
+                  <p>Festas/eventos não são permitidos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="legal" class="legal page-container">
+        <div class="page-content">
+          <div class="notice-content">
+            <div class="title-content">
+              <h1 class="title">Pormenores</h1>
+              <button class="btn btn-primary">Veja a disponibilidade</button>
+            </div>
+            <p>Informações que os hóspedes desta acomodação precisam saber</p>
+
+            <div class="notice-box">
+              <p>
+                Você deve apresentar um documento de identidade válido com foto e um
+                cartão de crédito no momento do check-in. Por favor, observe que Pedidos
+                Especiais estão sujeitos à disponibilidade, e custos adicionais podem ser
+                aplicados.
+              </p>
+              <p>
+                Por favor, informe Suítes Viver Arraial do Cabo com antecedência sobre seu
+                horário previsto de chegada. Para tanto, você pode utilizar o campo de
+                Pedidos Especiais ao fazer a reserva ou entrar em contato diretamente com
+                a propriedade usando os dados informados na sua confirmação de reserva.
+              </p>
+              <p>
+                Esta propriedade não permite festas de despedida de solteiro ou festas
+                parecidas.
+              </p>
+              <p>
+                Hóspedes menores de 18 anos só podem fazer check-in se estiverem
+                acompanhados de ao menos um dos pais ou responsáveis.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <nav class="footer-col">
+            <h4 class="footer-title">Apoio</h4>
+            <ul class="footer-list">
+              <li><a href="#">Administre suas viagens</a></li>
+              <li><a href="#">Contato - Serviço de Apoio ao Cliente</a></li>
+              <li><a href="#">Central de recursos de segurança</a></li>
+            </ul>
+          </nav>
+
+          <nav class="footer-col">
+            <h4 class="footer-title">Descubra</h4>
+            <ul class="footer-list">
+              <li><a href="#">Programa de fidelidade Genius</a></li>
+              <li><a href="#">Ofertas sazonais e de viagem</a></li>
+              <li><a href="#">Artigos de viagem</a></li>
+              <li><a href="#">Booking.com para Empresas</a></li>
+              <li><a href="#">Traveller Review Awards</a></li>
+              <li><a href="#">Aluguel de Carros</a></li>
+              <li><a href="#">Pesquisa de voos</a></li>
+              <li><a href="#">Reservas de restaurantes</a></li>
+              <li><a href="#">Consultores de Viagem</a></li>
+            </ul>
+          </nav>
+
+          <nav class="footer-col">
+            <h4 class="footer-title">Termos e configurações</h4>
+            <ul class="footer-list">
+              <li><a href="#">Privacidade e Cookies</a></li>
+              <li><a href="#">Termos de Serviço</a></li>
+              <li><a href="#">Declaração de acessibilidade</a></li>
+              <li><a href="#">Contestação dos parceiros</a></li>
+              <li><a href="#">Declaração contra o trabalho escravo</a></li>
+              <li><a href="#">Declaração de direitos humanos</a></li>
+            </ul>
+          </nav>
+
+          <nav class="footer-col">
+            <h4 class="footer-title">Parceiros</h4>
+            <ul class="footer-list">
+              <li><a href="#">Acesso à Extranet</a></li>
+              <li><a href="#">Central de Ajuda ao Parceiro</a></li>
+              <li><a href="#">Anuncie sua propriedade</a></li>
+              <li><a href="#">Torne-se um afiliado</a></li>
+            </ul>
+          </nav>
+
+          <nav class="footer-col">
+            <h4 class="footer-title">Sobre</h4>
+            <ul class="footer-list">
+              <li><a href="#">Sobre a Booking.com</a></li>
+              <li><a href="#">Como trabalhamos</a></li>
+              <li><a href="#">Sustentabilidade</a></li>
+              <li><a href="#">Assessoria de imprensa</a></li>
+              <li><a href="#">Trabalhe conosco</a></li>
+              <li><a href="#">Relação com investidores</a></li>
+              <li><a href="#">Contato corporativo</a></li>
+              <li><a href="#">Diretrizes de conteúdo e denúncia de uso inadequado</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <hr class="footer-sep" />
+
+        <div class="footer-legal">
+          <p class="copy">
+            A Booking.com é parte da Booking Holdings Inc., líder mundial em viagens
+            on-line e serviços relacionados.
+            <br />Copyright © 1996–2025 Booking.com™. Todos os direitos reservados.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+
+  <script src="../data/faq.data.js"></script>
+  <script src="../data/reviews.data.js"></script>
+  <script src="../data/gallery.data.js"></script>
+  <script src="../data/rooms.data.js"></script>
+  <script src="../data/overview.data.js"></script>
+
+  <script src="../javascript/faq.js"></script>
+  <script src="../javascript/gallery.js"></script>
+  <script src="../javascript/reviews.js"></script>
+  <script src="../javascript/rooms.js"></script>
+  <script src="../javascript/reviewCard.js"></script>
+  <script src="../javascript/gallery-overlay.js"></script>
+  <script src="../javascript/gallery-justified.js"></script>
+  <script src="../javascript/filtered.js"></script>
+  <script src="../javascript/overview.js"></script>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      try {
+        initReviewCard({ rootSelector: "#review-card", data: window.DATASETS?.reviews });
+      } catch {}
+      try {
+        initFaq({ rootSelector: "#faq", data: window.DATASETS?.faq });
+      } catch {}
+      try {
+        initReviews({ rootSelector: "#reviews", data: window.DATASETS?.reviews });
+      } catch {}
+      try {
+        initGallery({ rootSelector: "#gallery", data: window.DATASETS?.gallery });
+      } catch {}
+      try {
+        initRooms({ rootSelector: "#rooms", data: window.DATASETS?.rooms });
+      } catch {}
+      try {
+        initFilters({ roomSelector: "#filters" });
+        initFilters({ roomSelector: "#filters-mini" });
+      } catch {}
+      try {
+        initOverview({ rootSelector: "#overview", data: window.DATASETS?.property });
+      } catch {}
+    });
+  </script>
+</html>

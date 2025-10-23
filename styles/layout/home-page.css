@@ -1,0 +1,47 @@
+@media (max-width: 768px) {
+  .home-page .overview {
+    padding: 12px 0;
+  }
+  .home-page .overview .page-content .overview-grid .gallery-main-grid .gallery-image {
+    border-radius: 0;
+  }
+
+  .home-page .overview .page-content .overview-header,
+  .home-page .overview .page-content .overview-info {
+    padding: 0 16px;
+  }
+
+  .home-page .title-content button,
+  .home-page .gallery-grid-layout .gallery-sub-grid,
+  .home-page .services,
+  .home-page .bk-tabs,
+  .home-page .overview-header-right,
+  .home-page .overview-address .address-pin {
+    display: none;
+  }
+
+  .home-page .overview-address a {
+    margin: 0;
+  }
+
+  .home-page .title-content h1 {
+    margin-bottom: 8px;
+  }
+
+  .home-page .faq .title-content h1,
+  .home-page .reviews .title-content h1 {
+    margin-bottom: 0;
+  }
+
+  .home-page .overview-info {
+    margin-top: 16px;
+  }
+
+  .home-page .gm-content {
+    grid-template-columns: 1fr;
+  }
+
+  .home-page .gallery-grid-layout .loved-buttons {
+    display: flex;
+  }
+}

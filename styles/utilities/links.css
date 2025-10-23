@@ -17,6 +17,10 @@
     color: var(--blue, #003b95);
   }
 
+  .link-strong {
+    font-weight: 600;
+  }
+
   .link-underline {
     text-decoration: underline;
   }

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0,0"
+    />
+    <link rel="stylesheet" href="../styles/main.css" />
+    <link rel="stylesheet" href="../styles/layout/your-data.css" />
+  </head>
+  <body>
+    <header class="header-container">
+      <div class="header-content">
+        <div class="primary">
+          <div class="logo" id="logo-header">Logo</div>
+
+          <button class="btn u-primary-btn variant-one">BRL</button>
+          <button class="btn u-primary-btn variant-one">
+            <span class="material-symbols-outlined"> flag_circle </span>
+          </button>
+          <button class="btn u-primary-btn variant-one">
+            <span class="material-symbols-outlined"> help </span>
+          </button>
+          <button class="btn u-primary-btn variant-one">Anuncie sua propriedade</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="your-data">
+      <nav class="stepper" aria-label="Progresso da reserva">
+        <ol class="stepper__list">
+          <li class="stepper__item is-complete">
+            <span class="stepper__bullet" aria-hidden="true">
+              <svg viewBox="0 0 16 16" class="stepper__check" width="12" height="12">
+                <path
+                  d="M6.6 10.6 3.9 7.9l-1 1 3.7 3.7 7-7-1-1-6 6z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+            <span class="stepper__label">Sua escolha</span>
+            <span class="stepper__line" aria-hidden="true"></span>
+          </li>
+
+          <li class="stepper__item is-complete">
+            <span class="stepper__bullet" aria-hidden="true">
+              <svg viewBox="0 0 16 16" class="stepper__check" width="12" height="12">
+                <path
+                  d="M6.6 10.6 3.9 7.9l-1 1 3.7 3.7 7-7-1-1-6 6z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+            <span class="stepper__label">Seus dados</span>
+            <span class="stepper__line" aria-hidden="true"></span>
+          </li>
+
+          <li class="stepper__item is-current">
+            <span class="stepper__bullet" aria-hidden="true">3</span>
+            <span class="stepper__label">Concluir reserva</span>
+            <span class="stepper__line" aria-hidden="true"></span>
+          </li>
+        </ol>
+        <span class="stepper__label-mobile">Seus dados</span>
+      </nav>
+
+      <div class="page-container">
+        <div class="page-content">
+          <div class="col-one">
+            <div class="your-data__card hotel-card">
+              <img
+                src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop"
+                alt="Recanto Praia Grande"
+                class="hotel-card__image"
+              />
+              <div class="hotel-card__details">
+                <h3 class="hotel-card__title your-data__card-title">
+                  Recanto Praia Grande
+                </h3>
+                <p class="hotel-card__address">
+                  Trav. Arsênio Pessoa, n302B pousada, Arraial do Cabo, CEP 28930-000,
+                  Brasil
+                </p>
+                <p class="hotel-card__location">
+                  Excelente localização — <strong>9.2</strong>
+                </p>
+                <div class="hotel-card__review">
+                  <div class="review-badge hotel-card__review-badge">9,7</div>
+                  <div class="hotel-card__review-title">
+                    <p class="hotel-card__review-title-title">Fantástico</p>
+                    <p class="hotel-card__review-title-subtitle">459 avaliações</p>
+                  </div>
+                </div>
+                <div class="hotel-card__amenities">
+                  <span class="material-symbols-outlined"> local_parking </span>
+                  <span class="hotel-card__amenity">Estacionamento</span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="your-data__card your-data__card-padding hotel-card-booking-details"
+            >
+              <p class="your-data__card-title">Dados de sua reserva</p>
+
+              <div class="hotel-card-booking-details__scheduling">
+                <div class="hotel-card-booking-details__prohibited">
+                  <p>Entrada</p>
+                  <p>qua., 22 de out. de 2025</p>
+                  <p>14:00 – 00:00</p>
+                </div>
+                <div class="hotel-card-booking-details__exit">
+                  <p>Saída</p>
+                  <p>qua., 19 de nov. de 2025</p>
+                  <p>08:00 – 12:00</p>
+                </div>
+              </div>
+              <p class="hotel-card-booking-details__duration-label">
+                Duração total da hospedagem:
+              </p>
+              <p class="hotel-card-booking-details__duration-value">4 semanas</p>
+            </div>
+
+            <div class="your-data__card hotel-card-price">
+              <p class="your-data__card-title hotel-card-price__title">Resumo do preço</p>
+
+              <div>
+                <p class="hotel-card-price__price">
+                  <span>Total</span>
+                  <span>R$ 13.420</span>
+                </p>
+                <p class="hotel-card-price__info">Impostos e taxas incluídos</p>
+              </div>
+            </div>
+
+            <div class="your-data__card hotel-card-installment your-data__card-padding">
+              <p class="your-data__card-title">Quanto custa para cancelar?</p>
+              <p class="your-data__card-subtitle">
+                <span>Se você cancelar, terá que pagar</span>
+                <span>R$ 6.710</span>
+              </p>
+            </div>
+
+            <div
+              class="your-data__card hotel-card-payment-details your-data__card-padding"
+            >
+              <p class="your-data__card-title">Dados de pagamento</p>
+              <p class="your-data__card-subtitle">
+                <span>A acomodação vai cobrar de você</span>
+                <span>R$ 13.420</span>
+              </p>
+            </div>
+
+            <div
+              class="your-data__card hotel-card-payment-details your-data__card-padding your-data__card-grid-separator"
+            >
+              <p class="your-data__card-title">Você tem um código promocional?</p>
+              <div class="form-field">
+                <label for="promotionalCode">Insira seu código promocional</label>
+                <input type="text" id="promotionalCode" name="promotionalCode" required />
+              </div>
+
+              <button class="btn btn-primary">Aplicar</button>
+            </div>
+          </div>
+
+          <div class="col-two">
+            <div
+              class="your-data__card your-data__card-padding your-data__card-grid-separator"
+            >
+              <h3 class="your-data__card-title-strong">Pagar durante a estadia</h3>
+
+              <p>
+                A acomodação cuidará do pagamento. A data da cobrança depende das suas
+                condições de reserva.
+              </p>
+            </div>
+
+            <div
+              class="your-data__card your-data__card-padding your-data__card-grid-separator"
+            >
+              <h3 class="your-data__card-title-strong">Como você gostaria de pagar?</h3>
+
+              <form class="your-data__card-form">
+                <div class="your-data__card-form-inputs-col">
+                  <div class="form-field">
+                    <label for="nome"> Nome <span class="required">*</span> </label>
+                    <input type="text" id="nome" name="nome" required />
+                  </div>
+
+                  <div class="form-field">
+                    <label for="sobrenome">
+                      Sobrenome <span class="required">*</span>
+                    </label>
+                    <input type="text" id="sobrenome" name="sobrenome" required />
+                  </div>
+
+                  <div class="form-field">
+                    <label for="pix"> Chave PIX <span class="required">*</span> </label>
+                    <input
+                      type="text"
+                      id="pix"
+                      name="pix"
+                      placeholder="Digite sua chave PIX"
+                      required
+                    />
+                    <small>Chave PIX (email, CPF, CNPJ, ou telefone)</small>
+                  </div>
+
+                  <div class="form-field">
+                    <label for="email"> E-mail <span class="required">*</span> </label>
+                    <input type="email" id="email" name="email" required />
+                    <small>A confirmação será enviada para este e-mail</small>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div class="your-data__card-terms">
+              <div class="form-field checkbox-field">
+                <input
+                  type="checkbox"
+                  id="loginAndEconomize"
+                  name="loginAndEconomize"
+                  checked
+                />
+                <label for="loginAndEconomize" class="checkbox-field__label">
+                  Autorizo o recebimento de e-mails de marketing da Booking.com, incluindo
+                  promoções, recomendações personalizadas, recompensas, experiências de
+                  viagem e atualizações sobre os produtos e serviços da Booking.com.
+                </label>
+              </div>
+
+              <p class="your-data__card-terms-p-one">
+                Ao se inscrever, você nos permite personalizar ofertas e conteúdos de
+                acordo com os seus interesses, monitorando como você usa a Booking.com por
+                meio de tecnologias de rastreamento. Cancele a inscrição a qualquer
+                momento por meio das configurações da sua conta ou do link em qualquer
+                e-mail de marketing. Leia a nossa
+                <a href="" class="link link-strong">política de privacidade</a>.
+              </p>
+
+              <p class="your-data__card-terms-p-two">
+                Sua reserva é feita diretamente com Recanto Praia Grande. Ao concluir essa
+                reserva, você concorda com as
+                <a href="" class="link link-underline link-strong">condições da reserva</a
+                >, os
+                <a href="" class="link link-underline link-strong">termos gerais</a> , a
+                <a href="" class="link link-underline link-strong"
+                  >política de privacidade</a
+                >
+                e os
+                <a href="" class="link link-underline link-strong">termos da Wallet</a>.
+              </p>
+            </div>
+
+            <div class="your-data__buttons">
+              <div>
+                <button class="btn btn-primary" type="button">
+                  <span class="material-symbols-outlined"> lock </span>
+                  <span>Conclua a reserva</span>
+                </button>
+              </div>
+              <button class="btn btn-overlay booking-conditions-button" type="button">
+                Quais são as condições da minha reserva?
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-legal">
+          <p class="copy">
+            Direitos autorais © 1996–2025 Booking.com. Todos os direitos reservados.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+
+  <script src="../data/overview.data.js"></script>
+
+  <script src="../javascript/overview.js"></script>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      try {
+        initOverview({ rootSelector: "#overview", data: window.DATASETS?.property });
+      } catch {}
+    });
+  </script>
+</html>

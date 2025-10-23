@@ -5,9 +5,68 @@
   function $$(s, el) {
     return Array.from((el || document).querySelectorAll(s));
   }
-  function readDataset(dataArg, key) {
-    if (dataArg && typeof dataArg === "object") return dataArg;
-    return (window.DATASETS && window.DATASETS[key || "overview"]) || {};
+
+  function isOverviewShape(obj) {
+    return obj && typeof obj === "object" && obj.header && (obj.left || obj.right);
+  }
+  function isPropertyShape(obj) {
+    return obj && typeof obj === "object" && obj.hero && obj.branding;
+  }
+
+  function normalizeFromProperty(prop) {
+    return {
+      logoUrl: prop.media?.logoUrl || prop.branding?.logoUrl || "",
+      mapUrl: prop.media?.mapImageUrl || prop.links?.maps || "#",
+      header: {
+        title: prop.hero?.title || prop.branding?.name || "",
+        addressText:
+          prop.hero?.address?.fullText ||
+          [
+            prop.hero?.address?.line1,
+            prop.hero?.address?.city,
+            prop.hero?.address?.region,
+            prop.hero?.address?.postalCode,
+            prop.hero?.address?.country,
+          ]
+            .filter(Boolean)
+            .join(", "),
+        addressLinkLabel:
+          prop.hero?.address?.linkLabel || "Localização excelente – mostrar o mapa",
+        addressLinkUrl: prop.hero?.address?.linkUrl || prop.links?.maps || "#",
+        pinIcon: prop.hero?.address?.pinIcon || "location_on",
+      },
+      left: {
+        paragraphs: prop.about?.paragraphs || [],
+        couplesScore: prop.scores?.couples?.value ?? null,
+        couplesLinePrefix:
+          prop.scores?.couples?.labelPrefix ||
+          "Casais particularmente gostam da localização — eles deram nota",
+        distanceNote: prop.about?.notes?.distanceAttribution || "",
+        amenitiesTitle: "Ótimo para sua estadia",
+        amenities: Array.isArray(prop.amenities) ? prop.amenities : [],
+      },
+      right: {
+        title: "Destaques da acomodação",
+        city: prop.scores?.location?.city || prop.hero?.address?.city || "",
+        locationScore: prop.scores?.location?.value ?? null,
+        locationPrefix:
+          prop.scores?.location?.labelPrefix || "Localizado na área mais bem avaliada em",
+        ctaLabel: prop.hero?.primaryCta?.label || "Reservar agora",
+        ctaUrl: prop.hero?.primaryCta?.url || prop.links?.reservations || "#",
+      },
+    };
+  }
+
+  function normalizeInput(dataArg, key) {
+    if (isOverviewShape(dataArg)) return dataArg;
+
+    if (isPropertyShape(dataArg)) return normalizeFromProperty(dataArg);
+
+    const fromProperty = (window.APP_DATA && window.APP_DATA.property) || null;
+    if (isPropertyShape(fromProperty)) return normalizeFromProperty(fromProperty);
+
+    const dsOverview = (window.DATASETS && window.DATASETS[key || "overview"]) || {};
+    return dsOverview;
   }
 
   window.initOverview = function initOverview(opts = {}) {
@@ -19,26 +78,25 @@
       dataKey = "overview",
     } = opts;
 
-    const ds = readDataset(data, dataKey);
+    const ds = normalizeInput(data, dataKey);
 
     (function renderLogo() {
       const box = $("#logo-header");
       const h = ds.header || {};
-      if (!box) return;
-      if (!h.logoUrl) return;
+      if (!box || !ds.logoUrl) return;
 
       const img = document.createElement("img");
       img.className = "logo-img";
-      img.src = h.logoUrl;
+      img.src = ds.logoUrl;
       img.alt = h.title || "Logo";
       img.loading = "lazy";
       img.decoding = "async";
       img.referrerPolicy = "no-referrer";
 
       let node = img;
-      if (h.mapUrl && h.mapUrl !== "#") {
+      if (ds.mapUrl && ds.mapUrl !== "#") {
         const a = document.createElement("a");
-        a.href = h.mapUrl;
+        a.href = ds.mapUrl;
         a.target = "_blank";
         a.rel = "noopener";
         a.setAttribute("aria-label", "Abrir mapa");
@@ -53,19 +111,18 @@
     (function renderMap() {
       const box = $(mapsSelector);
       const h = ds.header || {};
-      if (!box) return;
-      if (!h.mapUrl) return;
+      if (!box || !ds.mapUrl) return;
 
       box.innerHTML = "";
       const a = document.createElement("a");
-      a.href = h.mapUrl;
+      a.href = ds.mapUrl;
       a.target = "_blank";
       a.rel = "noopener";
       a.setAttribute("aria-label", "Abrir mapa");
 
       const img = document.createElement("img");
       img.className = "maps-img";
-      img.src = h.mapUrl;
+      img.src = ds.mapUrl;
       img.alt = h.title ? `Mapa — ${h.title}` : "Mapa";
       img.loading = "lazy";
       img.decoding = "async";
@@ -103,7 +160,8 @@
         const url =
           ds.header.addressLinkUrl && ds.header.addressLinkUrl !== "#"
             ? ds.header.addressLinkUrl
-            : ds.header.mapUrl || "#";
+            : ds.mapUrl || "#";
+
         link.href = url;
         if (url && url !== "#") {
           link.setAttribute("target", "_blank");

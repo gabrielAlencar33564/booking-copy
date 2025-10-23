@@ -86,7 +86,69 @@
 
       root.style.setProperty("--sub-cols", String(subSlots));
 
-      if (!isMobile()) {
+      if (isMobile()) {
+        const mainSlice = images.slice(0, 1);
+        const subCandidates = images.slice(1, 1 + subSlots + 2);
+        const subSlice = subCandidates.slice(0, subSlots);
+        const visible = 1 + subSlice.length;
+        const extra = Math.max(0, images.length - visible) + 2;
+
+        if (mainSlice[0]) {
+          main.appendChild(
+            makeFig({ cls: "image-1", url: mainSlice[0], alt: "Imagem principal" })
+          );
+        }
+
+        subSlice.forEach((url, i) => {
+          const isLast = i === subSlice.length - 1;
+          sub.appendChild(
+            makeFig({
+              url,
+              alt: `Imagem ${1 + i + 1} da galeria`,
+              more: isLast && extra > 0 ? extra : 0,
+            })
+          );
+        });
+
+        const prevButton = document.querySelector(".rv-prev");
+        const nextButton = document.querySelector(".rv-next");
+
+        let currentIndex = 0;
+
+        function updateGallery() {
+          main.innerHTML = "";
+          sub.innerHTML = "";
+          const currentImage = images[currentIndex];
+          main.appendChild(
+            makeFig({ cls: "image-1", url: currentImage, alt: "Imagem principal" })
+          );
+
+          const subImages = images.slice(currentIndex + 1, currentIndex + 1 + subSlots);
+          subImages.forEach((url, i) => {
+            sub.appendChild(
+              makeFig({
+                url,
+                alt: `Imagem ${currentIndex + i + 1} da galeria`,
+              })
+            );
+          });
+
+          prevButton.disabled = currentIndex === 0;
+          nextButton.disabled = currentIndex === images.length - 1;
+        }
+
+        prevButton.addEventListener("click", () => {
+          if (currentIndex > 0) currentIndex--;
+          updateGallery();
+        });
+
+        nextButton.addEventListener("click", () => {
+          if (currentIndex < images.length - 1) currentIndex++;
+          updateGallery();
+        });
+
+        updateGallery();
+      } else {
         const mainSlice = images.slice(0, 3);
         const subSlice = images.slice(3, 3 + subSlots);
         const visible = 3 + subSlice.length;
@@ -111,29 +173,6 @@
             makeFig({
               url,
               alt: `Imagem ${3 + i + 1} da galeria`,
-              more: isLast && extra > 0 ? extra : 0,
-            })
-          );
-        });
-      } else {
-        const mainSlice = images.slice(0, 1);
-        const subCandidates = images.slice(1, 1 + subSlots + 2);
-        const subSlice = subCandidates.slice(0, subSlots);
-        const visible = 1 + subSlice.length;
-        const extra = Math.max(0, images.length - visible) + 2;
-
-        if (mainSlice[0]) {
-          main.appendChild(
-            makeFig({ cls: "image-1", url: mainSlice[0], alt: "Imagem principal" })
-          );
-        }
-
-        subSlice.forEach((url, i) => {
-          const isLast = i === subSlice.length - 1;
-          sub.appendChild(
-            makeFig({
-              url,
-              alt: `Imagem ${1 + i + 1} da galeria`,
               more: isLast && extra > 0 ? extra : 0,
             })
           );
