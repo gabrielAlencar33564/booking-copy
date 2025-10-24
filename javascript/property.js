@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const locationEl = document.querySelector(".hotel-card__location");
   if (locationEl)
-    locationEl.innerHTML = `${data.scores.location.labelPrefix} ${data.scores.location.city} — <strong>${data.scores.location.value}</strong>`;
+    locationEl.innerHTML = `${data.scores.location.labelPrefix} ${data.scores.location.city} - <strong>${data.scores.location.value}</strong>`;
 
   const badgeEl = document.querySelector(".hotel-card__review-badge");
   if (badgeEl) badgeEl.textContent = data.scores.couples.value;
@@ -196,9 +196,39 @@ document.addEventListener("DOMContentLoaded", () => {
     expansionSubtitle.textContent = `${r} quarto(s) para ${a} adulto(s) e ${c} criança(s)`;
   }
 
+  const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+  function startOfDayUTC(d) {
+    const x = new Date(d);
+    return new Date(Date.UTC(x.getUTCFullYear(), x.getUTCMonth(), x.getUTCDate()));
+  }
+
+  function nightsBetween(checkin, checkout) {
+    const ci = new Date(checkin);
+    const co = new Date(checkout);
+    if (isNaN(ci) || isNaN(co) || co <= ci) return 1;
+    const n = Math.round((startOfDayUTC(co) - startOfDayUTC(ci)) / MS_PER_DAY);
+    return Math.max(1, n);
+  }
+
+  function normalizePrice(v) {
+    if (typeof v === "number") return Number.isFinite(v) ? v : 0;
+    const s = String(v || "")
+      .replace(/\s/g, "")
+      .replace(/[Rr]\$?/g, "")
+      .replace(/\./g, "")
+      .replace(/,/g, ".");
+    const n = parseFloat(s);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  const nightlyPrice = normalizePrice(data.price);
+  const nights = nightsBetween(data.userDetails.checkin, data.userDetails.checkout);
+  const totalPrice = nightlyPrice * nights;
+  const cancelPrice = totalPrice * 0.5;
+
   const priceEl = document.querySelector(".hotel-card-price__price span:last-child");
   if (priceEl) {
-    const totalPrice = data.price * 10;
     priceEl.textContent = totalPrice.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
@@ -209,7 +239,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ".hotel-card-installment .your-data__card-subtitle span:last-child"
   );
   if (cancelEl) {
-    const cancelPrice = data.price * 5;
     cancelEl.textContent = cancelPrice.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
@@ -218,8 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const datePriceEl = document.querySelector("#datePrice");
   if (datePriceEl) {
-    const cancelPrice = data.price * 10;
-    datePriceEl.textContent = cancelPrice.toLocaleString("pt-BR", {
+    datePriceEl.textContent = totalPrice.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
     });

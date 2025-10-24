@@ -304,7 +304,6 @@
         if (!el) return;
         if (value !== "") {
           el.value = value;
-          // dispara eventos para integração com máscaras/validadores
           el.dispatchEvent(new Event("input", { bubbles: true }));
           el.dispatchEvent(new Event("change", { bubbles: true }));
         }

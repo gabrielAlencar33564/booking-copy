@@ -6,7 +6,7 @@ window.APP_DATA.property = {
     logoUrl:
       "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop",
   },
-  price: 1340,
+  price: 100,
   hero: {
     title: "Suítes Viver Arraial do Cabo",
     address: {

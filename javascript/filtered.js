@@ -553,19 +553,6 @@
       updateGuestsLabel();
     })();
 
-    const searchBtn = q(
-      '#search-btn, [id$="search-btn"], [data-role="search-btn"]',
-      root
-    );
-    searchBtn &&
-      searchBtn.addEventListener("click", () => {
-        if (!state.destination) return alert("Escolha um destino.");
-        if (!state.checkin || !state.checkout) return alert("Selecione as datas.");
-        writeStateToQuery();
-        console.log("[PESQUISAR]", roomSelector, JSON.stringify(state, null, 2));
-        alert("Buscando… veja os parâmetros no console.");
-      });
-
     if (qsEnabled) {
       readQueryIntoState();
       hydrateUIFromState();
