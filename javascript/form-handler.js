@@ -244,9 +244,9 @@
         if (firstError) scrollToFirstError();
         return;
       }
-      const target = nextBtn.getAttribute("data-next-url") || "./ultima-etapa.html";
+      const target = nextBtn.getAttribute("data-next-url");
       const url = buildNextUrl(target);
-      window.location.assign(url);
+      window.open(url);
     });
 
     const form = $(".your-data__card-form");

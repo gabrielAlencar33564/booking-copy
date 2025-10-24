@@ -1,19 +1,37 @@
 (function () {
-  const c = window.HEAD;
-  document.title = c.pageTitle;
-  const bind = (k, v) => {
-    const el = document.querySelector(`[data-bind="${k}"]`);
-    if (el) el.textContent = v;
-  };
-  bind("pageTitle", c.pageTitle);
-  bind("hotelName", c.hotelName);
-  bind("address", c.address);
+  function resolveProjectRoot() {
+    try {
+      var thisScript =
+        document.currentScript ||
+        Array.from(document.scripts).find(function (s) {
+          return /app\.js(\?|#|$)/i.test(s.src || "");
+        });
+      var attrRoot = thisScript && thisScript.getAttribute("data-project-root");
+      if (attrRoot) {
+        return new URL(attrRoot, thisScript.src || location.href).href.replace(
+          /([^/])$/,
+          "$1/"
+        );
+      }
+      var dir = new URL("./", location.href).href;
+      return dir.replace(/([^/])$/, "$1/");
+    } catch (e) {
+      return (String(location.href).replace(/[^/]+$/, "") || "").replace(
+        /([^/])$/,
+        "$1/"
+      );
+    }
+  }
 
-  // abas só marcam visualmente
-  document.querySelectorAll(".tab").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".tab").forEach((b) => b.classList.remove("is-active"));
-      btn.classList.add("is-active");
-    });
+  var root = resolveProjectRoot();
+  console.log("[file-router] projectRoot:", root);
+
+  window.initFileRouter({
+    mode: "iframe",
+    mount: "iframe[data-router-view]",
+    projectRoot: root,
+    home: "pages/home.html",
+    enforceHomeOnIndex: true,
+    rewriteBaseTag: true,
   });
 })();
