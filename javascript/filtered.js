@@ -20,6 +20,8 @@
   window.initFilters = function initFilters({
     roomSelector = "#filters",
     destinations = DEFAULT_POPULAR_DESTINATIONS,
+    querySync = { enabled: false, role: "writer", debounceMs: 120 },
+    defaults = {},
   } = {}) {
     const root =
       typeof roomSelector === "string"
@@ -50,6 +52,88 @@
       pet: false,
     };
     let justOpenedTick = 0;
+
+    const qsEnabled = !!(querySync && querySync.enabled);
+    const qsWriter = qsEnabled && (querySync.role || "writer") === "writer";
+    const qsDebounceMs =
+      typeof querySync?.debounceMs === "number" ? querySync.debounceMs : 120;
+
+    function toQS(val) {
+      return typeof val === "string" ? val.trim() : val;
+    }
+    function parseBool(v) {
+      if (v === "1" || v === "true" || v === true) return true;
+      if (v === "0" || v === "false" || v === false) return false;
+      return !!v;
+    }
+    const isInt = (n) => Number.isFinite(+n);
+
+    (function applyDefaults() {
+      if (!defaults || typeof defaults !== "object") return;
+      if (typeof defaults.destination === "string")
+        state.destination = defaults.destination;
+      if (typeof defaults.checkin === "string") state.checkin = defaults.checkin;
+      if (typeof defaults.checkout === "string") state.checkout = defaults.checkout;
+
+      if (isInt(defaults.adults)) state.adults = Math.max(1, +defaults.adults);
+      if (isInt(defaults.children)) state.children = Math.max(0, +defaults.children);
+      if (isInt(defaults.rooms)) state.rooms = Math.max(1, +defaults.rooms);
+
+      if ("pet" in defaults) state.pet = parseBool(defaults.pet);
+    })();
+
+    function readQueryIntoState() {
+      try {
+        const usp = new URLSearchParams(location.search);
+        const destination = usp.get("destination");
+        const checkin = usp.get("checkin");
+        const checkout = usp.get("checkout");
+        const adults = usp.get("adults");
+        const children = usp.get("children");
+        const rooms = usp.get("rooms");
+        const pet = usp.get("pet");
+        if (destination) state.destination = destination;
+        if (checkin) state.checkin = checkin;
+        if (checkout) state.checkout = checkout;
+        if (adults && !Number.isNaN(+adults)) state.adults = Math.max(1, +adults);
+        if (children && !Number.isNaN(+children)) state.children = Math.max(0, +children);
+        if (rooms && !Number.isNaN(+rooms)) state.rooms = Math.max(1, +rooms);
+        if (pet != null) state.pet = parseBool(pet);
+      } catch (e) {}
+    }
+
+    let qsWriteTimer = null;
+    function writeStateToQuery() {
+      if (!qsEnabled || !qsWriter) return;
+      clearTimeout(qsWriteTimer);
+      qsWriteTimer = setTimeout(() => {
+        try {
+          const url = new URL(location.href);
+          const p = url.searchParams;
+          const setOrDel = (k, v) => {
+            const has =
+              v !== null &&
+              v !== undefined &&
+              !(typeof v === "string" && v.trim() === "");
+            if (has) p.set(k, v);
+            else p.delete(k);
+          };
+
+          setOrDel("destination", toQS(state.destination));
+          setOrDel("checkin", toQS(state.checkin));
+          setOrDel("checkout", toQS(state.checkout));
+          setOrDel("adults", state.adults);
+          setOrDel("children", state.children);
+          setOrDel("rooms", state.rooms);
+          setOrDel("pet", state.pet ? "1" : "0");
+
+          const newQs = p.toString();
+          const newUrl =
+            url.origin + url.pathname + (newQs ? "?" + newQs : "") + url.hash;
+          history.replaceState(null, "", newUrl);
+        } catch (e) {}
+      }, qsDebounceMs);
+    }
 
     function closeAll(except = null) {
       qa(".fb[data-drop]").forEach((wrap) => {
@@ -118,6 +202,77 @@
     document.addEventListener("click", onDocClick);
     document.addEventListener("keydown", onDocKey);
 
+    const fmtBR = (s) => {
+      if (!s) return "";
+      const [Y, M, D] = s.split("-");
+      return `${D}/${M}/${Y}`;
+    };
+    function hydrateUIFromState() {
+      const destWrap = q(".fb-destination");
+      const destInput = pick(
+        ["#dest-input", '[data-role="dest-input"]', 'input[aria-controls="dest-list"]'],
+        destWrap
+      );
+      const destValue = pick(
+        ["#dest-value", '[data-role="dest-value"]', ".fb-destination .fb-value"],
+        root
+      );
+      if (destInput) destInput.value = state.destination || "";
+      if (destValue) destValue.textContent = state.destination || "Destino";
+
+      const datesWrap = q(".fb-dates");
+      const ciEl =
+        q('#checkin, [data-role="checkin"], [id$="checkin"]', datesWrap) ||
+        q('.fb-dates input[type="date"]', datesWrap);
+      const coEl =
+        q('#checkout, [data-role="checkout"], [id$="checkout"]', datesWrap) ||
+        (function () {
+          const ds = qa('.fb-dates input[type="date"]', datesWrap);
+          return ds.length > 1 ? ds[1] : null;
+        })();
+      const labelDates =
+        q(".fb-dates .fb-value", datesWrap) ||
+        q('#dates-value, [id$="dates-value"]', datesWrap) ||
+        q('#dates-value, [id$="dates-value"]', root);
+
+      if (ciEl) ciEl.value = state.checkin || "";
+      if (coEl) coEl.value = state.checkout || "";
+      if (labelDates) {
+        if (state.checkin && state.checkout) {
+          labelDates.textContent = `${fmtBR(state.checkin)} - ${fmtBR(state.checkout)}`;
+        } else if (state.checkin) {
+          labelDates.textContent = `${fmtBR(state.checkin)} - selecionar checkout`;
+        } else {
+          labelDates.textContent = "Selecione check-in e check-out";
+        }
+      }
+
+      const guestsWrap = q(".fb-guests");
+      const aEl = q("#adult-val, [data-role='adult-val'], [id$='adult-val']", guestsWrap);
+      const cEl = q("#child-val, [data-role='child-val'], [id$='child-val']", guestsWrap);
+      const rEl = q("#room-val, [data-role='room-val'], [id$='room-val']", guestsWrap);
+      const pEl = q("#has-pet, [data-role='has-pet'], [id$='has-pet']", guestsWrap);
+      const guestsValue = q(
+        '#guests-value, [id$="guests-value"], .fb-guests .fb-value',
+        root
+      );
+
+      if (aEl) aEl.textContent = state.adults;
+      if (cEl) cEl.textContent = state.children;
+      if (rEl) rEl.textContent = state.rooms;
+      if (pEl) pEl.checked = !!state.pet;
+
+      if (guestsValue) {
+        const a = state.adults,
+          c = state.children,
+          r = state.rooms,
+          pet = state.pet ? " · com pet" : "";
+        guestsValue.textContent = `${a} adulto${a !== 1 ? "s" : ""} · ${c} criança${
+          c !== 1 ? "s" : ""
+        } · ${r} quarto${r !== 1 ? "s" : ""}${pet}`;
+      }
+    }
+
     (function setupDestination() {
       const destWrap = q(".fb-destination");
       if (!destWrap) return;
@@ -165,7 +320,12 @@
       destInput &&
         destInput.addEventListener("focus", () => renderDestinos(destInput.value));
       destInput &&
-        destInput.addEventListener("input", () => renderDestinos(destInput.value));
+        destInput.addEventListener("input", () => {
+          renderDestinos(destInput.value);
+          state.destination = destInput.value || "";
+          if (destValue) destValue.textContent = state.destination || "Destino";
+          writeStateToQuery();
+        });
       destInput &&
         destInput.addEventListener("keydown", (e) => {
           if (e.key === "ArrowDown" && destList) {
@@ -184,6 +344,7 @@
           state.destination = `${city}, ${country}`;
           if (destInput) destInput.value = state.destination;
           if (destValue) destValue.textContent = state.destination;
+          writeStateToQuery();
           closeAll();
         });
 
@@ -263,11 +424,13 @@
           }
         }
         updateDatesLabel();
+        writeStateToQuery();
       }
 
       function setCheckout(val) {
         state.checkout = val || "";
         updateDatesLabel();
+        writeStateToQuery();
       }
 
       ci && ci.addEventListener("change", (e) => setCheckin(e.target.value));
@@ -285,6 +448,7 @@
           co.min = toISO(today);
         }
         updateDatesLabel();
+        writeStateToQuery();
       });
 
       q('[data-action$="apply-dates"]', datesWrap)?.addEventListener("click", (e) => {
@@ -350,6 +514,7 @@
           q(`[id$="${key}-val"]`, wrap);
         if (valEl) valEl.textContent = state[stKey];
         updateGuestsLabel();
+        writeStateToQuery();
       });
 
       root.addEventListener("change", (e) => {
@@ -358,6 +523,7 @@
         e.stopPropagation();
         state.pet = !!tgl.checked;
         updateGuestsLabel();
+        writeStateToQuery();
       });
 
       q('[data-action$="clear-guests"]', guestsWrap)?.addEventListener("click", (e) => {
@@ -376,6 +542,7 @@
         const pEl = q("#has-pet, [data-role='has-pet'], [id$='has-pet']", gw);
         if (pEl) pEl.checked = false;
         updateGuestsLabel();
+        writeStateToQuery();
       });
 
       q('[data-action$="apply-guests"]', guestsWrap)?.addEventListener("click", (e) => {
@@ -394,9 +561,18 @@
       searchBtn.addEventListener("click", () => {
         if (!state.destination) return alert("Escolha um destino.");
         if (!state.checkin || !state.checkout) return alert("Selecione as datas.");
+        writeStateToQuery();
         console.log("[PESQUISAR]", roomSelector, JSON.stringify(state, null, 2));
         alert("Buscando… veja os parâmetros no console.");
       });
+
+    if (qsEnabled) {
+      readQueryIntoState();
+      hydrateUIFromState();
+      if (qsWriter) writeStateToQuery();
+    } else {
+      hydrateUIFromState();
+    }
 
     return {
       getState: () => ({ ...state }),

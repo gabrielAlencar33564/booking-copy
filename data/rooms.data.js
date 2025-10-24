@@ -10,7 +10,7 @@ window.DATASETS["rooms"] = {
       capacity: 2,
       cta: {
         label: "Visualizar preços",
-        url: "#/your-data?room=dbl-std",
+        url: "/pages/your-data.html",
         target: "_self",
       },
     },
@@ -22,7 +22,7 @@ window.DATASETS["rooms"] = {
       capacity: 4,
       cta: {
         label: "Visualizar preços",
-        url: "#/your-data?room=sup-02",
+        url: "/pages/your-data.html",
         target: "_self",
       },
     },
@@ -34,7 +34,7 @@ window.DATASETS["rooms"] = {
       capacity: 2,
       cta: {
         label: "Visualizar preços",
-        url: "#/your-data?room=eco-01",
+        url: "/pages/your-data.html",
         target: "_self",
       },
     },

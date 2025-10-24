@@ -69,33 +69,19 @@
         <div class="page-content">
           <div class="col-one">
             <div class="your-data__card hotel-card">
-              <img
-                src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop"
-                alt="Recanto Praia Grande"
-                class="hotel-card__image"
-              />
+              <img src="" alt="" class="hotel-card__image" />
               <div class="hotel-card__details">
-                <h3 class="hotel-card__title your-data__card-title">
-                  Recanto Praia Grande
-                </h3>
-                <p class="hotel-card__address">
-                  Trav. Arsênio Pessoa, n302B pousada, Arraial do Cabo, CEP 28930-000,
-                  Brasil
-                </p>
-                <p class="hotel-card__location">
-                  Excelente localização — <strong>9.2</strong>
-                </p>
+                <h3 class="hotel-card__title your-data__card-title"></h3>
+                <p class="hotel-card__address"></p>
+                <p class="hotel-card__location"></p>
                 <div class="hotel-card__review">
-                  <div class="review-badge hotel-card__review-badge">9,7</div>
+                  <div class="review-badge hotel-card__review-badge"></div>
                   <div class="hotel-card__review-title">
-                    <p class="hotel-card__review-title-title">Fantástico</p>
-                    <p class="hotel-card__review-title-subtitle">459 avaliações</p>
+                    <p class="hotel-card__review-title-title"></p>
+                    <p class="hotel-card__review-title-subtitle"></p>
                   </div>
                 </div>
-                <div class="hotel-card__amenities">
-                  <span class="material-symbols-outlined"> local_parking </span>
-                  <span class="hotel-card__amenity">Estacionamento</span>
-                </div>
+                <div class="hotel-card__amenities"></div>
               </div>
             </div>
 
@@ -103,36 +89,31 @@
               class="your-data__card your-data__card-padding hotel-card-booking-details"
             >
               <p class="your-data__card-title">Dados de sua reserva</p>
-
               <div class="hotel-card-booking-details__scheduling">
                 <div class="hotel-card-booking-details__prohibited">
                   <p>Entrada</p>
-                  <p>qua., 22 de out. de 2025</p>
+                  <p></p>
                   <p>14:00 – 00:00</p>
                 </div>
                 <div class="hotel-card-booking-details__exit">
                   <p>Saída</p>
-                  <p>qua., 19 de nov. de 2025</p>
+                  <p></p>
                   <p>08:00 – 12:00</p>
                 </div>
               </div>
               <p class="hotel-card-booking-details__duration-label">
                 Duração total da hospedagem:
               </p>
-              <p class="hotel-card-booking-details__duration-value">4 semanas</p>
+              <p class="hotel-card-booking-details__duration-value"></p>
               <div class="divider"></div>
-
               <div class="hotel-card-booking-details__expansion">
                 <div>
                   <p class="hotel-card-booking-details__expansion-title">
                     Você selecionou
                   </p>
-                  <p class="hotel-card-booking-details__expansion-subtitle">
-                    2 quartos para 2 adultos
-                  </p>
+                  <p class="hotel-card-booking-details__expansion-subtitle"></p>
                 </div>
               </div>
-
               <button
                 class="btn btn-overlay"
                 type="button"
@@ -144,11 +125,10 @@
 
             <div class="your-data__card hotel-card-price">
               <p class="your-data__card-title hotel-card-price__title">Resumo do preço</p>
-
               <div>
                 <p class="hotel-card-price__price">
                   <span>Total</span>
-                  <span>R$ 13.420</span>
+                  <span></span>
                 </p>
                 <p class="hotel-card-price__info">Impostos e taxas incluídos</p>
               </div>
@@ -167,7 +147,7 @@
               <p class="your-data__card-title">Quanto custa para cancelar?</p>
               <p class="your-data__card-subtitle">
                 <span>Se você cancelar, terá que pagar</span>
-                <span>R$ 6.710</span>
+                <span></span>
               </p>
             </div>
           </div>
@@ -368,7 +348,7 @@
 
               <div class="form-field">
                 <label for="arrivalTime"
-                  >País/região <span class="required">*</span></label
+                  >Adicione seu horário estimado de chegada(opcional)</label
                 >
                 <select id="arrivalTime" name="arrivalTime" required>
                   <option value="brasil">Por favor, selecione</option>
@@ -403,19 +383,24 @@
 
             <div class="your-data__buttons">
               <div>
-                <button class="btn btn-overlay" type="button">
+                <a class="btn btn-overlay" href="#">
                   <span class="material-symbols-outlined"> sell </span>
                   <span>Cobrimos o menor preço!</span>
-                </button>
-                <button class="btn btn-primary" type="button">
+                </a>
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="next-step-button"
+                  data-next-url="/pages/complete-booking.html"
+                >
                   <span>Próximo: últimas informações </span>
                   <span class="material-symbols-outlined"> keyboard_arrow_right </span>
                 </button>
               </div>
 
-              <button class="btn btn-overlay booking-conditions-button" type="button">
+              <a class="btn btn-overlay booking-conditions-button" href="#">
                 Quais são as condições da minha reserva?
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -436,12 +421,6 @@
   <script src="../data/overview.data.js"></script>
 
   <script src="../javascript/overview.js"></script>
-
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      try {
-        initOverview({ rootSelector: "#overview", data: window.DATASETS?.property });
-      } catch {}
-    });
-  </script>
+  <script src="../javascript/property.js"></script>
+  <script src="../javascript/form-handler.js"></script>
 </html>

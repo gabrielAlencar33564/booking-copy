@@ -297,13 +297,13 @@
                 <button class="btn btn-overlay" type="button" aria-label="Compartilhar">
                   <span class="ms">share</span>
                 </button>
-                <button class="btn btn-primary">Reservar agora</button>
+                <a class="btn btn-primary" href="#prices">Reservar agora</a>
               </div>
 
-              <button class="btn btn-overlay" type="button">
+              <a class="btn btn-overlay" href="#prices">
                 <span class="ms">sell</span>
                 <span>Cobrimos o menor preço!</span>
-              </button>
+              </a>
             </div>
           </div>
 
@@ -374,9 +374,9 @@
               <header class="gm-header">
                 <h2 id="gm-title">Suítes Viver Arraial do Cabo</h2>
                 <div class="gm-actions">
-                  <button class="btn btn-primary" type="button" aria-label="Fechar">
+                  <a class="btn btn-primary" href="#prices" aria-label="Fechar">
                     Reservar agora
-                  </button>
+                  </a>
 
                   <button class="btn gm-close" type="button" aria-label="Fechar">
                     <span class="ms" aria-hidden="true">close</span>
@@ -1241,6 +1241,9 @@
   <script>
     window.addEventListener("DOMContentLoaded", () => {
       try {
+        initOverview({ rootSelector: "#overview", data: window.DATASETS?.property });
+      } catch {}
+      try {
         initReviewCard({ rootSelector: "#review-card", data: window.DATASETS?.reviews });
       } catch {}
       try {
@@ -1256,11 +1259,20 @@
         initRooms({ rootSelector: "#rooms", data: window.DATASETS?.rooms });
       } catch {}
       try {
-        initFilters({ roomSelector: "#filters" });
-        initFilters({ roomSelector: "#filters-mini" });
-      } catch {}
-      try {
-        initOverview({ rootSelector: "#overview", data: window.DATASETS?.property });
+        initFilters({
+          roomSelector: "#filters",
+          defaults: {
+            destination: window.APP_DATA.property.branding.name,
+          },
+        });
+        initFilters({
+          roomSelector: "#filters-mini",
+          querySync: {
+            enabled: true,
+            role: "writer",
+            debounceMs: 120,
+          },
+        });
       } catch {}
     });
   </script>

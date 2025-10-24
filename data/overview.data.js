@@ -3,8 +3,10 @@ window.APP_DATA.property = {
   id: "suites-viver-arraial-do-cabo",
   branding: {
     name: "Suítes Viver Arraial do Cabo",
-    logoUrl: "https://i.postimg.cc/wjFDwn9P/logo.png",
+    logoUrl:
+      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop",
   },
+  price: 1340,
   hero: {
     title: "Suítes Viver Arraial do Cabo",
     address: {
@@ -18,7 +20,7 @@ window.APP_DATA.property = {
       linkLabel: "Localização excelente – mostrar o mapa",
       linkUrl: "#",
     },
-    primaryCta: { label: "Reservar agora", url: "#" },
+    primaryCta: { label: "Reservar agora", url: "#prices" },
   },
   about: {
     paragraphs: [
@@ -41,6 +43,8 @@ window.APP_DATA.property = {
     { icon: "kitchen", label: "Frigobar" },
   ],
   scores: {
+    label: "Fantástico",
+    count: 114,
     couples: {
       labelPrefix: "Casais particularmente gostam da localização — eles deram nota",
       value: 9.7,
@@ -57,6 +61,6 @@ window.APP_DATA.property = {
   },
   links: {
     maps: "#",
-    reservations: "#",
+    reservations: "#prices",
   },
 };

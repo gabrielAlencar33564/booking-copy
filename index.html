@@ -10,34 +10,6 @@
   <body>
     <iframe data-router-view title="Conteúdo"></iframe>
 
-    <script src="./content.js"></script>
     <script src="./app.js"></script>
-    <script>
-      window.ROUTES = {
-        "/": { src: "pages/home.html", title: "Início" },
-
-        "/your-data": {
-          src: "pages/your-data.html",
-          title: "Seus dados",
-          requires: {
-            params: ["room"], // exige ?room=...
-            // storage: ["searchPayload"] // (opcional) se quiser aceitar dados salvos
-          },
-        },
-
-        "/complete-booking": {
-          src: "pages/complete-booking.html",
-          title: "Complete booking",
-          requires: {
-            params: ["room", "checkin", "checkout"], // exige os 3 params
-            // storage: ["guestInfo"]                // (exemplo opcional)
-          },
-        },
-
-        // Qualquer rota inválida deve cair na home, então nem precisa de 404 aqui
-        404: { src: "pages/404.html", title: "Página não encontrada" },
-      };
-    </script>
-    <script src="./router.js"></script>
   </body>
 </html>

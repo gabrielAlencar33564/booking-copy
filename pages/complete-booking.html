@@ -76,33 +76,19 @@
         <div class="page-content">
           <div class="col-one">
             <div class="your-data__card hotel-card">
-              <img
-                src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop"
-                alt="Recanto Praia Grande"
-                class="hotel-card__image"
-              />
+              <img src="" alt="" class="hotel-card__image" />
               <div class="hotel-card__details">
-                <h3 class="hotel-card__title your-data__card-title">
-                  Recanto Praia Grande
-                </h3>
-                <p class="hotel-card__address">
-                  Trav. Arsênio Pessoa, n302B pousada, Arraial do Cabo, CEP 28930-000,
-                  Brasil
-                </p>
-                <p class="hotel-card__location">
-                  Excelente localização — <strong>9.2</strong>
-                </p>
+                <h3 class="hotel-card__title your-data__card-title"></h3>
+                <p class="hotel-card__address"></p>
+                <p class="hotel-card__location"></p>
                 <div class="hotel-card__review">
-                  <div class="review-badge hotel-card__review-badge">9,7</div>
+                  <div class="review-badge hotel-card__review-badge"></div>
                   <div class="hotel-card__review-title">
-                    <p class="hotel-card__review-title-title">Fantástico</p>
-                    <p class="hotel-card__review-title-subtitle">459 avaliações</p>
+                    <p class="hotel-card__review-title-title"></p>
+                    <p class="hotel-card__review-title-subtitle"></p>
                   </div>
                 </div>
-                <div class="hotel-card__amenities">
-                  <span class="material-symbols-outlined"> local_parking </span>
-                  <span class="hotel-card__amenity">Estacionamento</span>
-                </div>
+                <div class="hotel-card__amenities"></div>
               </div>
             </div>
 
@@ -114,19 +100,19 @@
               <div class="hotel-card-booking-details__scheduling">
                 <div class="hotel-card-booking-details__prohibited">
                   <p>Entrada</p>
-                  <p>qua., 22 de out. de 2025</p>
+                  <p></p>
                   <p>14:00 – 00:00</p>
                 </div>
                 <div class="hotel-card-booking-details__exit">
                   <p>Saída</p>
-                  <p>qua., 19 de nov. de 2025</p>
+                  <p></p>
                   <p>08:00 – 12:00</p>
                 </div>
               </div>
               <p class="hotel-card-booking-details__duration-label">
                 Duração total da hospedagem:
               </p>
-              <p class="hotel-card-booking-details__duration-value">4 semanas</p>
+              <p class="hotel-card-booking-details__duration-value"></p>
             </div>
 
             <div class="your-data__card hotel-card-price">
@@ -135,7 +121,7 @@
               <div>
                 <p class="hotel-card-price__price">
                   <span>Total</span>
-                  <span>R$ 13.420</span>
+                  <span></span>
                 </p>
                 <p class="hotel-card-price__info">Impostos e taxas incluídos</p>
               </div>
@@ -145,7 +131,7 @@
               <p class="your-data__card-title">Quanto custa para cancelar?</p>
               <p class="your-data__card-subtitle">
                 <span>Se você cancelar, terá que pagar</span>
-                <span>R$ 6.710</span>
+                <span></span>
               </p>
             </div>
 
@@ -155,7 +141,7 @@
               <p class="your-data__card-title">Dados de pagamento</p>
               <p class="your-data__card-subtitle">
                 <span>A acomodação vai cobrar de você</span>
-                <span>R$ 13.420</span>
+                <span id="datePrice"></span>
               </p>
             </div>
 
@@ -264,14 +250,14 @@
 
             <div class="your-data__buttons">
               <div>
-                <button class="btn btn-primary" type="button">
+                <a class="btn btn-primary" href="#">
                   <span class="material-symbols-outlined"> lock </span>
                   <span>Conclua a reserva</span>
-                </button>
+                </a>
               </div>
-              <button class="btn btn-overlay booking-conditions-button" type="button">
+              <a class="btn btn-overlay booking-conditions-button" href="#">
                 Quais são as condições da minha reserva?
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -292,6 +278,7 @@
   <script src="../data/overview.data.js"></script>
 
   <script src="../javascript/overview.js"></script>
+  <script src="../javascript/property.js"></script>
 
   <script>
     window.addEventListener("DOMContentLoaded", () => {
@@ -299,5 +286,60 @@
         initOverview({ rootSelector: "#overview", data: window.DATASETS?.property });
       } catch {}
     });
+  </script>
+
+  <script>
+    (function () {
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+      function getParam(name) {
+        const qs = new URLSearchParams(location.search);
+        const v = qs.get(name);
+        return v != null ? v.trim() : "";
+      }
+
+      function fillInput(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (value !== "") {
+          el.value = value;
+          // dispara eventos para integração com máscaras/validadores
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+          el.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      }
+
+      function fillTextBindings(key, value) {
+        if (value === "") return;
+        $$(`[data-fill="${key}"]`).forEach((node) => {
+          node.textContent = value;
+        });
+      }
+
+      function focusFirstEmpty(ids) {
+        for (const id of ids) {
+          const el = document.getElementById(id);
+          if (el && !String(el.value || "").trim()) {
+            el.focus();
+            break;
+          }
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const nome = getParam("nome");
+        const sobrenome = getParam("sobrenome");
+        const email = getParam("email");
+
+        fillInput("nome", nome);
+        fillInput("sobrenome", sobrenome);
+        fillInput("email", email);
+        fillTextBindings("nome", nome);
+        fillTextBindings("sobrenome", sobrenome);
+        fillTextBindings("email", email);
+        focusFirstEmpty(["nome", "sobrenome", "email"]);
+      });
+    })();
   </script>
 </html>

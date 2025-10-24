@@ -6,30 +6,98 @@
     return {};
   }
 
-  // Util: navegar no roteador do documento pai (index.html) quando estiver dentro do iframe
-  function navigateViaParentHash(url) {
-    const isIframe = window.parent && window.parent !== window;
-    const targetWin = isIframe ? window.parent : window;
+  function buildUrlWithPageQueryParams(targetUrl) {
+    const REQUIRED_KEYS = ["checkin", "checkout", "adults", "children", "rooms"];
 
-    if (!url) return;
+    const toInt = (v) => {
+      const n = parseInt(v, 10);
+      return Number.isFinite(n) ? n : NaN;
+    };
+    const isValidISODate = (s) => {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+      const d = new Date(s);
 
-    // Se houver API pública do Router, use-a (mais elegante)
-    if (url.startsWith("#/")) {
-      const hash = url; // ex: "#/your-data?room=dbl-std"
-      if (targetWin.Router && typeof targetWin.Router.navigate === "function") {
-        const withoutHash = hash.slice(1); // "/your-data?room=dbl-std"
-        const [pathname, qs] = withoutHash.split("?");
-        const params = new URLSearchParams(qs || "");
-        targetWin.Router.navigate(pathname, params);
-      } else {
-        // fallback: altera o hash da janela alvo
-        targetWin.location.hash = hash;
-      }
-      return;
+      return !isNaN(d.getTime()) && s === d.toISOString().slice(0, 10);
+    };
+
+    const currentParams = new URLSearchParams(location.search);
+
+    const missing = REQUIRED_KEYS.filter(
+      (k) => !currentParams.has(k) || currentParams.get(k) === ""
+    );
+    if (missing.length > 0) {
+      alert(
+        "Preencha os dados obrigatórios antes de continuar:\n" +
+          missing
+            .map((k) => {
+              switch (k) {
+                case "checkin":
+                  return "• Check-in (YYYY-MM-DD)";
+                case "checkout":
+                  return "• Check-out (YYYY-MM-DD)";
+                case "adults":
+                  return "• Quantidade de adultos";
+                case "children":
+                  return "• Quantidade de crianças";
+                case "rooms":
+                  return "• Quantidade de quartos";
+                default:
+                  return `• ${k}`;
+              }
+            })
+            .join("\n")
+      );
+      return null;
     }
 
-    // Caso seja uma URL "normal" (http/arquivo local), abre do jeito padrão
-    window.open(url, "_self");
+    const checkin = currentParams.get("checkin");
+    const checkout = currentParams.get("checkout");
+    const adults = toInt(currentParams.get("adults"));
+    const children = toInt(currentParams.get("children"));
+    const rooms = toInt(currentParams.get("rooms"));
+
+    const errors = [];
+    if (!isValidISODate(checkin))
+      errors.push("• Check-in deve estar no formato YYYY-MM-DD.");
+    if (!isValidISODate(checkout))
+      errors.push("• Check-out deve estar no formato YYYY-MM-DD.");
+    if (isValidISODate(checkin) && isValidISODate(checkout)) {
+      const dIn = new Date(checkin);
+      const dOut = new Date(checkout);
+      if (!(dOut > dIn)) errors.push("• Check-out deve ser posterior ao check-in.");
+    }
+    if (!Number.isFinite(adults) || adults < 1)
+      errors.push("• Adultos deve ser um número ≥ 1.");
+    if (!Number.isFinite(children) || children < 0)
+      errors.push("• Crianças deve ser um número ≥ 0.");
+    if (!Number.isFinite(rooms) || rooms < 1)
+      errors.push("• Quartos deve ser um número ≥ 1.");
+
+    if (errors.length > 0) {
+      alert("Alguns valores estão inválidos:\n" + errors.join("\n"));
+      return null;
+    }
+
+    try {
+      const finalUrl = new URL(targetUrl, location.href);
+      currentParams.forEach((value, key) => {
+        finalUrl.searchParams.set(key, value);
+      });
+      return finalUrl.toString();
+    } catch (e) {
+      if (!location.search || location.search === "?") return targetUrl;
+      if (/\?/.test(targetUrl)) {
+        return targetUrl + "&" + location.search.replace(/^\?/, "");
+      }
+      return targetUrl + location.search;
+    }
+  }
+
+  function navigateViaParentHash(url) {
+    if (!url) return;
+    const merged = buildUrlWithPageQueryParams(url);
+    if (!merged) return;
+    window.open(merged, "_self");
   }
 
   window.initRooms = function initRooms({
@@ -101,6 +169,12 @@
       const a = el("a", "link link-underline");
       a.href = room.url || "#";
       a.textContent = room.name || "";
+
+      a.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        if (!a.href || a.href.endsWith("#")) return;
+        navigateViaParentHash(a.href);
+      });
       cellType.appendChild(a);
 
       const meta = el("div", "rooms__meta");

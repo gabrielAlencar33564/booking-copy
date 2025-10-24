@@ -116,6 +116,7 @@
 .hotel-card__amenities {
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 4px;
   margin-top: 12px;
 }
@@ -375,14 +376,14 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  white-space: nowrap; /* Impede que o texto quebre em várias linhas */
-  overflow: hidden; /* Esconde o texto que ultrapassar o limite */
-  text-overflow: ellipsis; /* Adiciona os três pontinhos (...) quando o texto for cortado */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .booking-conditions-button {
   overflow: hidden;
-  max-width: max-content; /* Garante que o botão não ultrapasse o tamanho do conteúdo */
+  max-width: max-content;
   margin-left: auto;
   margin-top: 16px;
 }
