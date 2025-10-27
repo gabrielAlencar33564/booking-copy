@@ -387,17 +387,44 @@
           return ds.length > 1 ? ds[1] : null;
         })();
 
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
       const toISO = (d) => d.toISOString().slice(0, 10);
+      const addDays = (d, n) => {
+        const x = new Date(d);
+        x.setDate(x.getDate() + n);
+        x.setHours(0, 0, 0, 0);
+        return x;
+      };
+      const diffDays = (a, b) => {
+        const d1 = new Date(a);
+        const d2 = new Date(b);
+        return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+      };
       const fmt = (s) => {
         if (!s) return "";
         const [Y, M, D] = s.split("-");
         return `${D}/${M}/${Y}`;
       };
 
-      if (ci) ci.min = toISO(today);
-      if (co) co.min = toISO(today);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const maxStayRaw =
+        window.APP_DATA &&
+        window.APP_DATA.property &&
+        window.APP_DATA.property.maxReservationLimit;
+      const maxStayDays =
+        Number.isFinite(+maxStayRaw) && +maxStayRaw > 0 ? +maxStayRaw : 30;
+
+      const horizonMaxDate = addDays(today, 365);
+
+      if (ci) {
+        ci.min = toISO(today);
+        ci.max = toISO(horizonMaxDate);
+      }
+      if (co) {
+        co.min = toISO(addDays(today, 1));
+        co.max = toISO(horizonMaxDate);
+      }
 
       function updateDatesLabel() {
         if (!label) return;
@@ -408,20 +435,63 @@
         else label.textContent = "Selecione check-in e check-out";
       }
 
+      function enforceBounds() {
+        if (state.checkin) {
+          const ciDate = new Date(state.checkin);
+          if (ciDate < today) {
+            state.checkin = toISO(today);
+            if (ci) ci.value = state.checkin;
+          }
+          if (ciDate > horizonMaxDate) {
+            state.checkin = toISO(horizonMaxDate);
+            if (ci) ci.value = state.checkin;
+          }
+        }
+        if (state.checkout) {
+          const coDate = new Date(state.checkout);
+          if (coDate < today) {
+            state.checkout = toISO(today);
+            if (co) co.value = state.checkout;
+          }
+          if (coDate > horizonMaxDate) {
+            state.checkout = toISO(horizonMaxDate);
+            if (co) co.value = state.checkout;
+          }
+        }
+      }
+
+      function applyStayWindowForCheckout() {
+        if (!co) return;
+        if (state.checkin) {
+          const newCoMin = addDays(state.checkin, 1);
+          const newCoMax = addDays(state.checkin, maxStayDays);
+          co.min = toISO(newCoMin);
+          co.max = toISO(newCoMax);
+          if (state.checkout) {
+            const d = diffDays(state.checkin, state.checkout);
+            if (d < 1 || d > maxStayDays) {
+              const clamped = newCoMax;
+              state.checkout = toISO(clamped);
+              co.value = state.checkout;
+            }
+          }
+        } else {
+          co.min = toISO(addDays(today, 1));
+          co.max = toISO(horizonMaxDate);
+        }
+      }
+
       function setCheckin(val) {
         state.checkin = val || "";
-        if (co) {
-          if (state.checkin) {
-            const minOut = new Date(state.checkin);
-            minOut.setDate(minOut.getDate() + 1);
-            co.min = toISO(minOut);
-            if (state.checkout && state.checkout <= state.checkin) {
-              state.checkout = "";
-              co.value = "";
-            }
-          } else {
-            co.min = toISO(today);
-          }
+        enforceBounds();
+        applyStayWindowForCheckout();
+        if (
+          state.checkout &&
+          state.checkin &&
+          diffDays(state.checkin, state.checkout) < 1
+        ) {
+          state.checkout = "";
+          if (co) co.value = "";
         }
         updateDatesLabel();
         writeStateToQuery();
@@ -429,6 +499,19 @@
 
       function setCheckout(val) {
         state.checkout = val || "";
+        enforceBounds();
+        if (state.checkin && state.checkout) {
+          const d = diffDays(state.checkin, state.checkout);
+          if (d < 1) {
+            state.checkout = "";
+            if (co) co.value = "";
+          } else if (d > maxStayDays) {
+            const clamped = addDays(state.checkin, maxStayDays);
+            state.checkout = toISO(clamped);
+            if (co) co.value = state.checkout;
+          }
+        }
+        applyStayWindowForCheckout();
         updateDatesLabel();
         writeStateToQuery();
       }
@@ -442,10 +525,15 @@
         e.stopPropagation();
         state.checkin = "";
         state.checkout = "";
-        if (ci) ci.value = "";
+        if (ci) {
+          ci.value = "";
+          ci.min = toISO(today);
+          ci.max = toISO(horizonMaxDate);
+        }
         if (co) {
           co.value = "";
-          co.min = toISO(today);
+          co.min = toISO(addDays(today, 1));
+          co.max = toISO(horizonMaxDate);
         }
         updateDatesLabel();
         writeStateToQuery();
@@ -469,6 +557,8 @@
           setTimeout(() => ci && ci.focus(), 0);
         });
 
+      if (state.checkin) setCheckin(state.checkin);
+      if (state.checkout) setCheckout(state.checkout);
       updateDatesLabel();
     })();
 
@@ -497,13 +587,13 @@
         if (!btn || !root.contains(btn)) return;
         e.stopPropagation();
         const key = btn.getAttribute("data-ctr");
-        const op = btn.getAttribute("data-op");
+        the_op = btn.getAttribute("data-op");
         const map = { adult: "adults", child: "children", room: "rooms" };
         const limits = { adults: [1, 16], children: [0, 16], rooms: [1, 9] };
         const stKey = map[key];
         if (!stKey) return;
         state[stKey] = clamp(
-          state[stKey] + (op === "+" ? 1 : -1),
+          state[stKey] + (the_op === "+" ? 1 : -1),
           limits[stKey][0],
           limits[stKey][1]
         );
