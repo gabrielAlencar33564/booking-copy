@@ -3,13 +3,93 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title data-bind="pageTitle">Suítes Viver Arraial do Cabo</title>
+    <title>Suítes Viver Arraial do Cabo</title>
+
+    <meta http-equiv="refresh" content="0; url=pages/home.html" />
+
+    <base href="./" />
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="./styles/base/base.css" />
   </head>
   <body>
-    <iframe data-router-view title="Conteúdo"></iframe>
-    <script src="./file-router.js"></script>
-    <script src="./app.js"></script>
+    <iframe data-router-view title="Conteúdo" style="display: none"></iframe>
+
+    <p id="fallback" style="margin: 16px; display: none">
+      Se não redirecionar automaticamente,
+      <a id="fallbackLink" href="pages/home.html">ir para a Home</a>.
+    </p>
+
+    <script>
+      (function () {
+        var hrefNow = String(window.location.href || "");
+        if (/(^|\/)pages\/home\.html(\?|#|$)/i.test(hrefNow)) return;
+
+        function buildAbsoluteToHome() {
+          var clean = hrefNow.split("#")[0].split("?")[0];
+
+          var lastSlash = clean.lastIndexOf("/");
+          var baseDir = lastSlash >= 0 ? clean.slice(0, lastSlash + 1) : clean;
+
+          return baseDir + "pages/home.html";
+        }
+
+        var target = buildAbsoluteToHome();
+
+        function alreadyAtHome() {
+          return /(^|\/)pages\/home\.html(\?|#|$)/i.test(String(window.location.href));
+        }
+
+        function tryHref() {
+          if (!alreadyAtHome()) window.location.href = target;
+        }
+        function tryAssign() {
+          if (!alreadyAtHome()) window.location.assign(target);
+        }
+        function tryReplace() {
+          if (!alreadyAtHome()) window.location.replace(target);
+        }
+        function tryAnchorClick() {
+          if (alreadyAtHome()) return;
+          var a = document.createElement("a");
+          a.href = target;
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+        }
+        function showFallback() {
+          var p = document.getElementById("fallback");
+          var a = document.getElementById("fallbackLink");
+          if (a) a.href = target;
+          if (p) p.style.display = "block";
+        }
+
+        var run = function () {
+          tryReplace();
+          setTimeout(tryAssign, 80);
+          setTimeout(tryHref, 160);
+          setTimeout(tryAnchorClick, 240);
+          setTimeout(function () {
+            if (!alreadyAtHome()) showFallback();
+          }, 400);
+        };
+
+        if (document.readyState === "complete" || document.readyState === "interactive") {
+          run();
+        } else {
+          document.addEventListener("DOMContentLoaded", run, { once: true });
+        }
+
+        setTimeout(function () {
+          if (!alreadyAtHome()) tryHref();
+        }, 800);
+      })();
+    </script>
+
+    <noscript>
+      <p style="margin: 16px">
+        JavaScript desativado. <a href="pages/home.html">Ir para a Home</a>
+      </p>
+    </noscript>
   </body>
 </html>

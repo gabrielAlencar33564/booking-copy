@@ -372,7 +372,7 @@
   width: 100%;
 }
 
-.your-data__buttons button {
+.your-data__buttons a {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -441,4 +441,104 @@
   .extra-col {
     display: none;
   }
+}
+
+.payment-option {
+  width: max-content;
+}
+
+.option-input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.option-card {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 200px;
+  block-size: 120px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.option-card:hover {
+  box-shadow: 0 0 0 3px rgba(25, 118, 255, 0.12);
+}
+.option-input:focus-visible + .option-card {
+  box-shadow: 0 0 0 3px rgba(25, 118, 255, 0.35);
+}
+
+.corner-check {
+  position: absolute;
+  inset-block-start: 8px;
+  inset-inline-start: 8px;
+  inline-size: 24px;
+  block-size: 24px;
+  border: 2px solid var(--line);
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  transition: background-color 0.18s ease, border-color 0.18s ease, opacity 0.12s ease;
+}
+.corner-check svg {
+  inline-size: 16px;
+  block-size: 16px;
+  opacity: 0;
+}
+.corner-check path {
+  stroke: #fff;
+  stroke-width: 3;
+  fill: none;
+}
+
+.option-input:checked + .option-card {
+  border-color: var(--blue-2);
+  box-shadow: 0 0 0 3px rgba(25, 118, 255, 0.16);
+}
+.option-input:checked + .option-card .corner-check {
+  background: var(--blue-2);
+  border-color: var(--blue-2);
+}
+.option-input:checked + .option-card .corner-check svg {
+  opacity: 1;
+}
+
+.brand-wrap {
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+}
+.brand-wrap img {
+  height: 8rem;
+  object-position: center;
+  object-fit: contain;
+  display: block;
+}
+
+.option-title {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.pay-during-your-stay img {
+  height: 3.5rem;
+  margin-right: auto;
+  object-position: center;
+  object-fit: contain;
+  display: block;
 }

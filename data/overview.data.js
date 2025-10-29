@@ -8,6 +8,9 @@ window.APP_DATA.property = {
   },
   maxReservationLimit: 15,
   price: 100,
+
+  completeReservationUrl: "#",
+
   hero: {
     title: "Suítes Viver Arraial do Cabo",
     address: {
@@ -47,7 +50,7 @@ window.APP_DATA.property = {
     label: "Fantástico",
     count: 114,
     couples: {
-      labelPrefix: "Casais particularmente gostam da localização — eles deram nota",
+      labelPrefix: "Casais particularmente gostam da localização, deram nota",
       value: 9.7,
     },
     location: {

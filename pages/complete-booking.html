@@ -160,7 +160,7 @@
 
           <div class="col-two">
             <div
-              class="your-data__card your-data__card-padding your-data__card-grid-separator"
+              class="your-data__card your-data__card-padding your-data__card-grid-separator pay-during-your-stay"
             >
               <h3 class="your-data__card-title-strong">Pagar durante a estadia</h3>
 
@@ -168,6 +168,8 @@
                 A acomodação cuidará do pagamento. A data da cobrança depende das suas
                 condições de reserva.
               </p>
+
+              <img src="/assets/logo-pix.png" alt="Pix" />
             </div>
 
             <div
@@ -175,39 +177,21 @@
             >
               <h3 class="your-data__card-title-strong">Como você gostaria de pagar?</h3>
 
-              <form class="your-data__card-form">
-                <div class="your-data__card-form-inputs-col">
-                  <div class="form-field">
-                    <label for="nome"> Nome <span class="required">*</span> </label>
-                    <input type="text" id="nome" name="nome" required />
-                  </div>
+              <div class="payment-option">
+                <input id="pay_pix" class="option-input" type="checkbox" />
+                <label class="option-card" for="pay_pix">
+                  <span class="corner-check" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M5 12.5l4 4 10-10" />
+                    </svg>
+                  </span>
 
-                  <div class="form-field">
-                    <label for="sobrenome">
-                      Sobrenome <span class="required">*</span>
-                    </label>
-                    <input type="text" id="sobrenome" name="sobrenome" required />
-                  </div>
-
-                  <div class="form-field">
-                    <label for="pix"> Chave PIX <span class="required">*</span> </label>
-                    <input
-                      type="text"
-                      id="pix"
-                      name="pix"
-                      placeholder="Digite sua chave PIX"
-                      required
-                    />
-                    <small>Chave PIX (email, CPF, CNPJ, ou telefone)</small>
-                  </div>
-
-                  <div class="form-field">
-                    <label for="email"> E-mail <span class="required">*</span> </label>
-                    <input type="email" id="email" name="email" required />
-                    <small>A confirmação será enviada para este e-mail</small>
-                  </div>
-                </div>
-              </form>
+                  <span class="brand-wrap">
+                    <img src="/assets/logo-pix.png" alt="Pix" />
+                  </span>
+                </label>
+                <div class="option-title">Pix</div>
+              </div>
             </div>
 
             <div class="your-data__card-terms">
@@ -250,9 +234,9 @@
 
             <div class="your-data__buttons">
               <div>
-                <a class="btn btn-primary" href="#">
+                <a id="complete-reservation" class="btn btn-primary" href="#">
                   <span class="material-symbols-outlined"> lock </span>
-                  <span>Conclua a reserva</span>
+                  <span>Concluar a reserva</span>
                 </a>
               </div>
               <a class="btn btn-overlay booking-conditions-button" href="#">
@@ -293,52 +277,81 @@
       const $ = (s, r = document) => r.querySelector(s);
       const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-      function getParam(name) {
-        const qs = new URLSearchParams(location.search);
-        const v = qs.get(name);
-        return v != null ? v.trim() : "";
+      function getCompleteBtn() {
+        return document.getElementById("complete-reservation");
       }
 
-      function fillInput(id, value) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        if (value !== "") {
-          el.value = value;
-          el.dispatchEvent(new Event("input", { bubbles: true }));
-          el.dispatchEvent(new Event("change", { bubbles: true }));
+      function getPaymentInputs() {
+        return $$(
+          '.payment-option input[type="checkbox"], .payment-option input[type="radio"]'
+        );
+      }
+
+      function setBtnDisabled(btn, disabled) {
+        if (!btn) return;
+        btn.setAttribute("aria-disabled", disabled ? "true" : "false");
+        btn.dataset.disabled = disabled ? "1" : "0";
+
+        if (disabled) {
+          btn.classList.add("is-disabled");
+          btn.setAttribute("tabindex", "-1");
+          btn.style.pointerEvents = "auto";
+        } else {
+          btn.classList.remove("is-disabled");
+          btn.removeAttribute("tabindex");
+          btn.style.pointerEvents = "";
         }
       }
 
-      function fillTextBindings(key, value) {
-        if (value === "") return;
-        $$(`[data-fill="${key}"]`).forEach((node) => {
-          node.textContent = value;
+      function anyPaymentSelected() {
+        return getPaymentInputs().some((el) => el.checked);
+      }
+
+      function updateButtonState() {
+        const btn = getCompleteBtn();
+        setBtnDisabled(btn, !anyPaymentSelected());
+      }
+
+      function go(url) {
+        try {
+          const target = new URL(url, location.href);
+          window.location.assign(target.toString());
+        } catch {
+          window.location.href = url;
+        }
+      }
+
+      function init() {
+        const btn = getCompleteBtn();
+        const inputs = getPaymentInputs();
+        const redirectUrl = window.APP_DATA?.property?.completeReservationUrl || "#";
+
+        if (!btn) return;
+
+        updateButtonState();
+
+        inputs.forEach((el) => {
+          el.addEventListener("change", updateButtonState);
+          el.addEventListener("input", updateButtonState);
+        });
+
+        btn.addEventListener("click", (e) => {
+          if (btn.getAttribute("aria-disabled") === "true") {
+            e.preventDefault();
+            return;
+          }
+          e.preventDefault();
+          if (redirectUrl && redirectUrl !== "#") {
+            go(redirectUrl);
+          }
         });
       }
 
-      function focusFirstEmpty(ids) {
-        for (const id of ids) {
-          const el = document.getElementById(id);
-          if (el && !String(el.value || "").trim()) {
-            el.focus();
-            break;
-          }
-        }
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
       }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const nome = getParam("nome");
-        const sobrenome = getParam("sobrenome");
-        const email = getParam("email");
-
-        fillInput("nome", nome);
-        fillInput("sobrenome", sobrenome);
-        fillInput("email", email);
-        fillTextBindings("nome", nome);
-        fillTextBindings("sobrenome", sobrenome);
-        fillTextBindings("email", email);
-        focusFirstEmpty(["nome", "sobrenome", "email"]);
-      });
     })();
   </script>
 </html>

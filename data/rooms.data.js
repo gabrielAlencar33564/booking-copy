@@ -1,6 +1,6 @@
 window.DATASETS = window.DATASETS || {};
 window.DATASETS["rooms"] = {
-  labels: { type: "Tipo de quarto", people: "Quantas pessoas?" },
+  labels: { type: "Tipo de quarto" },
   rooms: [
     {
       id: "dbl-std",

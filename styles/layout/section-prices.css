@@ -46,7 +46,7 @@
 
   .rooms__head {
     display: grid;
-    grid-template-columns: 1fr 180px 180px;
+    grid-template-columns: 1fr 180px;
     gap: 0;
     background: var(--blue);
     color: #fff;
@@ -63,7 +63,7 @@
 
   .rooms__row {
     display: grid;
-    grid-template-columns: 1fr 180px 180px;
+    grid-template-columns: 1fr 180px;
     border-top: 1px solid var(--line);
   }
   .rooms__cell {
