@@ -246,7 +246,7 @@
       }
       const target = nextBtn.getAttribute("data-next-url");
       const url = buildNextUrl(target);
-      window.open(url);
+      window.open(url, "_self");
     });
 
     const form = $(".your-data__card-form");

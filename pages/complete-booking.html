@@ -169,7 +169,7 @@
                 condições de reserva.
               </p>
 
-              <img src="/assets/logo-pix.png" alt="Pix" />
+              <img src="https://i.postimg.cc/q79WDMKG/logo-pix.png" alt="Pix" />
             </div>
 
             <div
@@ -187,7 +187,7 @@
                   </span>
 
                   <span class="brand-wrap">
-                    <img src="/assets/logo-pix.png" alt="Pix" />
+                    <img src="https://i.postimg.cc/q79WDMKG/logo-pix.png" alt="Pix" />
                   </span>
                 </label>
                 <div class="option-title">Pix</div>
@@ -291,7 +291,6 @@
         if (!btn) return;
         btn.setAttribute("aria-disabled", disabled ? "true" : "false");
         btn.dataset.disabled = disabled ? "1" : "0";
-
         if (disabled) {
           btn.classList.add("is-disabled");
           btn.setAttribute("tabindex", "-1");
@@ -312,6 +311,37 @@
         setBtnDisabled(btn, !anyPaymentSelected());
       }
 
+      function isValidISODate(s) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+        const d = new Date(s + "T00:00:00Z");
+        return !isNaN(d.getTime()) && s === d.toISOString().slice(0, 10);
+      }
+
+      function getNightsFromQuery() {
+        const qs = new URLSearchParams(location.search);
+        const checkin = qs.get("checkin") || "";
+        const checkout = qs.get("checkout") || "";
+        if (!isValidISODate(checkin) || !isValidISODate(checkout)) return null;
+
+        const inUTC = Date.parse(checkin + "T00:00:00Z");
+        const outUTC = Date.parse(checkout + "T00:00:00Z");
+        const ms = outUTC - inUTC;
+        const nights = Math.floor(ms / 86400000);
+        return nights > 0 ? nights : null;
+      }
+
+      function resolveRedirectUrl() {
+        const list = window.APP_DATA?.property?.completeReservationUrl;
+        if (!Array.isArray(list) || list.length === 0) return null;
+
+        const nights = getNightsFromQuery();
+        if (!nights) {
+          return list[0] || null;
+        }
+        const idx = Math.max(0, Math.min(list.length - 1, nights - 1));
+        return list[idx] || null;
+      }
+
       function go(url) {
         try {
           const target = new URL(url, location.href);
@@ -324,8 +354,6 @@
       function init() {
         const btn = getCompleteBtn();
         const inputs = getPaymentInputs();
-        const redirectUrl = window.APP_DATA?.property?.completeReservationUrl || "#";
-
         if (!btn) return;
 
         updateButtonState();
@@ -341,8 +369,12 @@
             return;
           }
           e.preventDefault();
-          if (redirectUrl && redirectUrl !== "#") {
-            go(redirectUrl);
+
+          const url = resolveRedirectUrl();
+          if (url) {
+            go(url);
+          } else {
+            alert("Não foi possível determinar o link de conclusão da reserva.");
           }
         });
       }

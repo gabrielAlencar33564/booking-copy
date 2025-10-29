@@ -6,10 +6,12 @@ window.APP_DATA.property = {
     logoUrl:
       "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop",
   },
-  maxReservationLimit: 15,
   price: 100,
-
-  completeReservationUrl: "#",
+  maxReservationLimit: 15,
+  completeReservationUrl: [
+    "https://www.google.com/",
+    "https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal",
+  ],
 
   hero: {
     title: "Suítes Viver Arraial do Cabo",
