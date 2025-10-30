@@ -93,32 +93,14 @@
       img.decoding = "async";
       img.referrerPolicy = "no-referrer";
 
-      let node = img;
-      if (ds.mapUrl && ds.mapUrl !== "#") {
-        const a = document.createElement("a");
-        a.href = ds.mapUrl;
-        a.target = "_blank";
-        a.rel = "noopener";
-        a.setAttribute("aria-label", "Abrir mapa");
-        a.appendChild(img);
-        node = a;
-      }
-
       box.innerHTML = "";
-      box.appendChild(node);
+      box.appendChild(img);
     })();
 
     (function renderMap() {
       const box = $(mapsSelector);
       const h = ds.header || {};
       if (!box || !ds.mapUrl) return;
-
-      box.innerHTML = "";
-      const a = document.createElement("a");
-      a.href = ds.mapUrl;
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.setAttribute("aria-label", "Abrir mapa");
 
       const img = document.createElement("img");
       img.className = "maps-img";
@@ -127,8 +109,8 @@
       img.loading = "lazy";
       img.decoding = "async";
 
-      a.appendChild(img);
-      box.appendChild(a);
+      box.innerHTML = "";
+      box.appendChild(img);
     })();
 
     const header = $(headerSelector);
