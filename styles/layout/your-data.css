@@ -191,6 +191,34 @@
   text-align: end;
 }
 
+.hotel-card-price__breakdown {
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+  display: grid;
+  gap: 6px;
+}
+.hotel-card-price__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 1.25;
+  font-size: 14px;
+}
+.hotel-card-price__row--discount {
+  color: #0a7d2b;
+  font-weight: 600;
+}
+.hotel-card-price__row--discount span:last-child {
+  color: #0a7d2b;
+}
+@media (max-width: 480px) {
+  .hotel-card-price__price {
+    font-size: 20px;
+  }
+  .hotel-card-price__row {
+    font-size: 13px;
+  }
+}
 .hotel-card-booking-details__scheduling {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

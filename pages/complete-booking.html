@@ -117,12 +117,27 @@
 
             <div class="your-data__card hotel-card-price">
               <p class="your-data__card-title hotel-card-price__title">Resumo do preço</p>
-
               <div>
                 <p class="hotel-card-price__price">
                   <span>Total</span>
                   <span></span>
                 </p>
+
+                <div
+                  class="hotel-card-price__breakdown"
+                  id="priceBreakdown"
+                  style="display: none"
+                >
+                  <p class="hotel-card-price__row">
+                    <span>Subtotal</span>
+                    <span id="subtotalPrice"></span>
+                  </p>
+                  <p class="hotel-card-price__row hotel-card-price__row--discount">
+                    <span>Desconto</span>
+                    <span id="discountValue"></span>
+                  </p>
+                </div>
+
                 <p class="hotel-card-price__info">Impostos e taxas incluídos</p>
               </div>
             </div>

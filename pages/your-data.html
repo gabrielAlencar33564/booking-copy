@@ -130,6 +130,22 @@
                   <span>Total</span>
                   <span></span>
                 </p>
+
+                <div
+                  class="hotel-card-price__breakdown"
+                  id="priceBreakdown"
+                  style="display: none"
+                >
+                  <p class="hotel-card-price__row">
+                    <span>Subtotal</span>
+                    <span id="subtotalPrice"></span>
+                  </p>
+                  <p class="hotel-card-price__row hotel-card-price__row--discount">
+                    <span>Desconto</span>
+                    <span id="discountValue"></span>
+                  </p>
+                </div>
+
                 <p class="hotel-card-price__info">Impostos e taxas incluídos</p>
               </div>
             </div>
@@ -274,8 +290,12 @@
                 </p>
                 <p>
                   <span class="material-symbols-outlined"> check_circle </span>
-                  <span><strong>Hospedes:</strong> <span>1 adulto</span></span>
+                  <span
+                    ><strong>Hóspedes:</strong>
+                    <span id="guestsValue">1 adulto</span></span
+                  >
                 </p>
+
                 <p>
                   <span class="material-symbols-outlined"> check_circle </span>
                   <span>Não é permitido fumar</span>

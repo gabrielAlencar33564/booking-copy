@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
         data.userDetails.rooms = toInt(params.get("rooms"), data.userDetails.rooms);
       if (has("pet"))
         data.userDetails.pet = toBool(params.get("pet"), data.userDetails.pet);
-    } catch (e) {}
+    } catch (_) {}
   })();
 
   const titleEl = document.querySelector(".hotel-card__title");
@@ -128,11 +128,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const x = new Date(d);
       return new Date(Date.UTC(x.getUTCFullYear(), x.getUTCMonth(), x.getUTCDate()));
     }
-
     function plural(n, singular, plural) {
       return n === 1 ? singular : plural;
     }
-
     function diffMonthsAndDays(start, end) {
       const s = startOfDayUTC(start);
       const e = startOfDayUTC(end);
@@ -197,12 +195,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const MS_PER_DAY = 1000 * 60 * 60 * 24;
-
   function startOfDayUTC(d) {
     const x = new Date(d);
     return new Date(Date.UTC(x.getUTCFullYear(), x.getUTCMonth(), x.getUTCDate()));
   }
-
   function nightsBetween(checkin, checkout) {
     const ci = new Date(checkin);
     const co = new Date(checkout);
@@ -210,7 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const n = Math.round((startOfDayUTC(co) - startOfDayUTC(ci)) / MS_PER_DAY);
     return Math.max(1, n);
   }
-
   function normalizePrice(v) {
     if (typeof v === "number") return Number.isFinite(v) ? v : 0;
     const s = String(v || "")
@@ -221,35 +216,95 @@ document.addEventListener("DOMContentLoaded", () => {
     const n = parseFloat(s);
     return Number.isFinite(n) ? n : 0;
   }
+  function parseDiscount(discount, baseTotal) {
+    let amount = 0;
+    if (typeof discount === "string" && discount.trim().endsWith("%")) {
+      const pct = parseFloat(discount);
+      if (Number.isFinite(pct) && pct > 0) amount = baseTotal * (pct / 100);
+    } else {
+      const n = normalizePrice(discount);
+      if (n > 0 && n < 1) amount = baseTotal * n;
+      else if (n >= 1) amount = Math.min(baseTotal, n);
+    }
+    return Math.max(0, Math.min(amount, baseTotal));
+  }
 
   const nightlyPrice = normalizePrice(data.price);
   const nights = nightsBetween(data.userDetails.checkin, data.userDetails.checkout);
-  const totalPrice = nightlyPrice * nights;
-  const cancelPrice = totalPrice * 0.5;
+  const baseTotal = nightlyPrice * nights;
+
+  const discountRaw = data.discountPrice;
+  const discountAmount = parseDiscount(discountRaw, baseTotal);
+  const hasDiscount = discountAmount > 0;
+
+  const finalTotal = baseTotal - discountAmount;
 
   const priceEl = document.querySelector(".hotel-card-price__price span:last-child");
   if (priceEl) {
-    priceEl.textContent = totalPrice.toLocaleString("pt-BR", {
+    priceEl.textContent = finalTotal.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
     });
   }
 
-  const cancelEl = document.querySelector(
-    ".hotel-card-installment .your-data__card-subtitle span:last-child"
+  const breakdown = document.getElementById("priceBreakdown");
+  const subtotalEl = document.getElementById("subtotalPrice");
+  const discountEl = document.getElementById("discountValue");
+  if (breakdown && subtotalEl && discountEl) {
+    if (hasDiscount) {
+      breakdown.style.display = "";
+      subtotalEl.textContent = baseTotal.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      });
+      discountEl.textContent = `- ${discountAmount.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      })}`;
+    } else {
+      breakdown.style.display = "none";
+    }
+  }
+
+  const cancelMsgEl = document.querySelector(
+    ".hotel-card-installment .your-data__card-subtitle span:first-child"
   );
-  if (cancelEl) {
-    cancelEl.textContent = cancelPrice.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
+  if (cancelMsgEl) {
+    const ci = new Date(data.userDetails.checkin);
+    if (!isNaN(ci)) {
+      const dateStr = ci.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+      cancelMsgEl.innerHTML = `Cancelamento grátis até <strong>${dateStr}</strong>`;
+    } else {
+      cancelMsgEl.textContent = "Se você cancelar, terá que pagar";
+    }
   }
 
   const datePriceEl = document.querySelector("#datePrice");
   if (datePriceEl) {
-    datePriceEl.textContent = totalPrice.toLocaleString("pt-BR", {
+    datePriceEl.textContent = finalTotal.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
     });
   }
+
+  (function updateGuestsInCardTwo() {
+    const el = document.getElementById("guestsValue");
+    if (!el) return;
+
+    const adults = Number.isFinite(+data.userDetails.adults)
+      ? +data.userDetails.adults
+      : 0;
+    const children = Number.isFinite(+data.userDetails.children)
+      ? +data.userDetails.children
+      : 0;
+    const total = Math.max(0, adults + children);
+
+    const lblHosp = total === 1 ? "hóspede" : "hóspedes";
+
+    el.textContent = `${total} ${lblHosp}`;
+  })();
 });
