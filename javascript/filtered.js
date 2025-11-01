@@ -17,6 +17,9 @@
     { city: "Cabo Frio", country: "Brasil" },
   ];
 
+  const SYNC_EVENT = "filters:sync";
+  const STORAGE_KEY = "filters:sync";
+
   window.initFilters = function initFilters({
     roomSelector = "#filters",
     destinations = DEFAULT_POPULAR_DESTINATIONS,
@@ -31,6 +34,9 @@
       console.warn("[initFilters] container não encontrado:", roomSelector);
       return;
     }
+
+    const instanceId = Math.random().toString(36).slice(2);
+    let suppressQSWrite = false;
 
     const q = (sel, r) => (r || root).querySelector(sel);
     const qa = (sel, r) => Array.from((r || root).querySelectorAll(sel));
@@ -92,9 +98,9 @@
         const children = usp.get("children");
         const rooms = usp.get("rooms");
         const pet = usp.get("pet");
-        if (destination) state.destination = destination;
-        if (checkin) state.checkin = checkin;
-        if (checkout) state.checkout = checkout;
+        if (destination != null) state.destination = destination || "";
+        if (checkin != null) state.checkin = checkin || "";
+        if (checkout != null) state.checkout = checkout || "";
         if (adults && !Number.isNaN(+adults)) state.adults = Math.max(1, +adults);
         if (children && !Number.isNaN(+children)) state.children = Math.max(0, +children);
         if (rooms && !Number.isNaN(+rooms)) state.rooms = Math.max(1, +rooms);
@@ -102,9 +108,74 @@
       } catch (e) {}
     }
 
+    function shallowEqual(a, b) {
+      const keys = [
+        "destination",
+        "checkin",
+        "checkout",
+        "adults",
+        "children",
+        "rooms",
+        "pet",
+      ];
+      for (const k of keys) {
+        if (a[k] !== b[k]) return false;
+      }
+      return true;
+    }
+
+    function cloneState() {
+      return {
+        destination: state.destination,
+        checkin: state.checkin,
+        checkout: state.checkout,
+        adults: state.adults,
+        children: state.children,
+        rooms: state.rooms,
+        pet: state.pet,
+      };
+    }
+
+    function applyExternalState(payload) {
+      const incoming = payload?.state;
+      if (!incoming) return;
+
+      const prev = cloneState();
+      Object.assign(state, {
+        destination: incoming.destination ?? state.destination,
+        checkin: incoming.checkin ?? state.checkin,
+        checkout: incoming.checkout ?? state.checkout,
+        adults: Number.isFinite(+incoming.adults) ? +incoming.adults : state.adults,
+        children: Number.isFinite(+incoming.children)
+          ? +incoming.children
+          : state.children,
+        rooms: Number.isFinite(+incoming.rooms) ? +incoming.rooms : state.rooms,
+        pet: parseBool(incoming.pet ?? state.pet),
+      });
+
+      if (!shallowEqual(prev, state)) {
+        suppressQSWrite = true;
+        try {
+          hydrateUIFromState();
+        } finally {
+          suppressQSWrite = false;
+        }
+      }
+    }
+
+    function broadcastSync() {
+      const payload = { sourceId: instanceId, state: cloneState(), ts: Date.now() };
+      window.dispatchEvent(new CustomEvent(SYNC_EVENT, { detail: payload }));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (_) {}
+    }
+
     let qsWriteTimer = null;
     function writeStateToQuery() {
-      if (!qsEnabled || !qsWriter) return;
+      if (!qsEnabled || !qsWriter || suppressQSWrite) return;
       clearTimeout(qsWriteTimer);
       qsWriteTimer = setTimeout(() => {
         try {
@@ -131,6 +202,8 @@
           const newUrl =
             url.origin + url.pathname + (newQs ? "?" + newQs : "") + url.hash;
           history.replaceState(null, "", newUrl);
+
+          broadcastSync();
         } catch (e) {}
       }, qsDebounceMs);
     }
@@ -525,6 +598,7 @@
         e.stopPropagation();
         state.checkin = "";
         state.checkout = "";
+        const toISO = (d) => d.toISOString().slice(0, 10);
         if (ci) {
           ci.value = "";
           ci.min = toISO(today);
@@ -532,7 +606,7 @@
         }
         if (co) {
           co.value = "";
-          co.min = toISO(addDays(today, 1));
+          co.min = toISO(new Date(today.getTime() + 86400000));
           co.max = toISO(horizonMaxDate);
         }
         updateDatesLabel();
@@ -553,9 +627,7 @@
 
       const openBtn = datesWrap.querySelector(".fb-trigger");
       openBtn &&
-        openBtn.addEventListener("click", () => {
-          setTimeout(() => ci && ci.focus(), 0);
-        });
+        openBtn.addEventListener("click", () => setTimeout(() => ci && ci.focus(), 0));
 
       if (state.checkin) setCheckin(state.checkin);
       if (state.checkout) setCheckout(state.checkout);
@@ -587,7 +659,7 @@
         if (!btn || !root.contains(btn)) return;
         e.stopPropagation();
         const key = btn.getAttribute("data-ctr");
-        the_op = btn.getAttribute("data-op");
+        const the_op = btn.getAttribute("data-op");
         const map = { adult: "adults", child: "children", room: "rooms" };
         const limits = { adults: [1, 16], children: [0, 16], rooms: [1, 9] };
         const stKey = map[key];
@@ -646,7 +718,36 @@
     if (qsEnabled) {
       readQueryIntoState();
       hydrateUIFromState();
+
       if (qsWriter) writeStateToQuery();
+
+      window.addEventListener(SYNC_EVENT, (ev) => {
+        const detail = ev.detail || {};
+        if (detail.sourceId === instanceId) return;
+        applyExternalState(detail);
+      });
+
+      window.addEventListener("popstate", () => {
+        const prev = cloneState();
+        readQueryIntoState();
+        if (!shallowEqual(prev, state)) {
+          suppressQSWrite = true;
+          try {
+            hydrateUIFromState();
+          } finally {
+            suppressQSWrite = false;
+          }
+        }
+      });
+
+      window.addEventListener("storage", (e) => {
+        if (e.key !== STORAGE_KEY || !e.newValue) return;
+        try {
+          const payload = JSON.parse(e.newValue);
+          if (payload.sourceId === instanceId) return;
+          applyExternalState(payload);
+        } catch (_) {}
+      });
     } else {
       hydrateUIFromState();
     }

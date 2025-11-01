@@ -44,4 +44,9 @@
   .home-page .gallery-grid-layout .loved-buttons {
     display: flex;
   }
+
+  .home-page .filtered .fb-guests,
+  .home-page .filtered .fb-destination {
+    display: none;
+  }
 }

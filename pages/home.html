@@ -1265,6 +1265,11 @@
           defaults: {
             destination: window.APP_DATA.property.branding.name,
           },
+          querySync: {
+            enabled: true,
+            role: "writer",
+            debounceMs: 120,
+          },
         });
         initFilters({
           roomSelector: "#filters-mini",
