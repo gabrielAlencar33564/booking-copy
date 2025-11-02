@@ -216,28 +216,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const n = parseFloat(s);
     return Number.isFinite(n) ? n : 0;
   }
-  function parseDiscount(discount, baseTotal) {
-    let amount = 0;
-    if (typeof discount === "string" && discount.trim().endsWith("%")) {
-      const pct = parseFloat(discount);
-      if (Number.isFinite(pct) && pct > 0) amount = baseTotal * (pct / 100);
-    } else {
-      const n = normalizePrice(discount);
-      if (n > 0 && n < 1) amount = baseTotal * n;
-      else if (n >= 1) amount = Math.min(baseTotal, n);
-    }
-    return Math.max(0, Math.min(amount, baseTotal));
-  }
 
-  const nightlyPrice = normalizePrice(data.price);
   const nights = nightsBetween(data.userDetails.checkin, data.userDetails.checkout);
-  const baseTotal = nightlyPrice * nights;
 
-  const discountRaw = data.discountPrice;
-  const discountAmount = parseDiscount(discountRaw, baseTotal);
-  const hasDiscount = discountAmount > 0;
+  const originalPerNight = normalizePrice(
+    data.originalPrice ?? data.originalValue ?? data.preco ?? data.price
+  );
+  const discountedPerNight = normalizePrice(
+    data.discountPrice ?? data.discountValue ?? originalPerNight
+  );
 
-  const finalTotal = baseTotal - discountAmount;
+  const safeOriginalPerNight =
+    originalPerNight > 0 ? originalPerNight : discountedPerNight;
+  const safeDiscountedPerNight =
+    discountedPerNight > 0 &&
+    discountedPerNight <= (safeOriginalPerNight || discountedPerNight)
+      ? discountedPerNight
+      : safeOriginalPerNight;
+
+  const originalTotal = (safeOriginalPerNight || 0) * nights;
+  const finalTotal = (safeDiscountedPerNight || 0) * nights;
+  const discountTotal = Math.max(0, originalTotal - finalTotal);
+  const hasDiscount = discountTotal > 0.00001;
 
   const priceEl = document.querySelector(".hotel-card-price__price span:last-child");
   if (priceEl) {
@@ -251,16 +251,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const subtotalEl = document.getElementById("subtotalPrice");
   const discountEl = document.getElementById("discountValue");
   if (breakdown && subtotalEl && discountEl) {
-    if (hasDiscount) {
+    if (safeOriginalPerNight > 0) {
       breakdown.style.display = "";
-      subtotalEl.textContent = baseTotal.toLocaleString("pt-BR", {
+      subtotalEl.textContent = originalTotal.toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL",
       });
-      discountEl.textContent = `- ${discountAmount.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      })}`;
+      if (hasDiscount) {
+        discountEl.textContent = `- ${discountTotal.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        })}`;
+        discountEl.parentElement.style.display = "";
+      } else {
+        discountEl.parentElement.style.display = "none";
+      }
     } else {
       breakdown.style.display = "none";
     }
