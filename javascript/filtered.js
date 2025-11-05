@@ -6,6 +6,73 @@
     return Array.from(r.querySelectorAll(s));
   }
 
+  function buildUrlWithPageQueryParams(targetUrl) {
+    const REQUIRED_KEYS = ["checkin", "checkout"];
+
+    const isValidISODate = (s) => {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+      const d = new Date(s);
+      return !isNaN(d.getTime()) && s === d.toISOString().slice(0, 10);
+    };
+
+    const currentParams = new URLSearchParams(location.search);
+
+    const missing = REQUIRED_KEYS.filter(
+      (k) => !currentParams.has(k) || currentParams.get(k) === ""
+    );
+    if (missing.length > 0) {
+      alert(
+        "Preencha os dados obrigatórios antes de continuar:\n" +
+          missing
+            .map((k) => {
+              switch (k) {
+                case "checkin":
+                  return "• Check-in (YYYY-MM-DD)";
+                case "checkout":
+                  return "• Check-out (YYYY-MM-DD)";
+                default:
+                  return `• ${k}`;
+              }
+            })
+            .join("\n")
+      );
+      return null;
+    }
+
+    const checkin = currentParams.get("checkin");
+    const checkout = currentParams.get("checkout");
+
+    const errors = [];
+    if (!isValidISODate(checkin))
+      errors.push("• Check-in deve estar no formato YYYY-MM-DD.");
+    if (!isValidISODate(checkout))
+      errors.push("• Check-out deve estar no formato YYYY-MM-DD.");
+    if (isValidISODate(checkin) && isValidISODate(checkout)) {
+      const dIn = new Date(checkin);
+      const dOut = new Date(checkout);
+      if (!(dOut > dIn)) errors.push("• Check-out deve ser posterior ao check-in.");
+    }
+
+    if (errors.length > 0) {
+      alert("Alguns valores estão inválidos:\n" + errors.join("\n"));
+      return null;
+    }
+
+    try {
+      const finalUrl = new URL(targetUrl, location.href);
+      currentParams.forEach((value, key) => {
+        finalUrl.searchParams.set(key, value);
+      });
+      return finalUrl.toString();
+    } catch (e) {
+      if (!location.search || location.search === "?") return targetUrl;
+      if (/\?/.test(targetUrl)) {
+        return targetUrl + "&" + location.search.replace(/^\?/, "");
+      }
+      return targetUrl + location.search;
+    }
+  }
+
   const DEFAULT_POPULAR_DESTINATIONS = [
     { city: "Salvador", country: "Brasil" },
     { city: "São Paulo", country: "Brasil" },
@@ -760,4 +827,21 @@
       },
     };
   };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const buttons = ["#search-btn", "#mini-search-btn"];
+    buttons.forEach((selector) => {
+      const btn = document.querySelector(selector);
+      if (btn) {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const target = "your-data.html";
+          const finalUrl = buildUrlWithPageQueryParams(target);
+          if (finalUrl) {
+            window.location.href = finalUrl;
+          }
+        });
+      }
+    });
+  });
 })();
