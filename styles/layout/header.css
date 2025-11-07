@@ -91,7 +91,10 @@
   }
 
   .reservation-timer-banner {
+    top: 0;
+    z-index: 10;
     width: 100%;
+    position: sticky;
     background-color: var(--blue);
   }
 
